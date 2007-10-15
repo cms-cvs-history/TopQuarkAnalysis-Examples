@@ -73,6 +73,8 @@ replace genCandidatesForMET.verbose=false
 
 # Muon parametrization
 include "FastSimulation/ParamL3MuonProducer/data/ParamL3Muon.cfi"
+# Muon isolation (added S.L. 15/10/07)
+include "RecoMuon/MuonIsolationProducers/data/muIsolation.cff"
 
 # Electron reconstruction
 include "FastSimulation/EgammaElectronAlgos/data/electronGSPixelSeeds.cfi"
@@ -199,7 +201,8 @@ sequence famosWithCaloTowersAndParticleFlow = {
 
 sequence famosWithMuons = {
     famosWithTracks,
-    paramMuons
+    paramMuons,
+    muIsolation_ParamGlobalMuons
 }
 
 sequence famosWithElectrons = {
@@ -238,6 +241,7 @@ sequence famosWithEverything = {
     ecalClusteringSequence,
     famosElectronSequence,
     paramMuons,
+    muIsolation_ParamGlobalMuons,
     caloJetMetGen,
     caloJetMet,
     vertexreco,
