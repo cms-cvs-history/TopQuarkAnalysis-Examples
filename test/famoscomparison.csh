@@ -1,7 +1,7 @@
 #! /bin/csh
 
 if ($#argv < 1) then
-    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet] [index] [nbins] [min] [max] [filename1.root] [filename2.root]"
+    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [events]"
     exit
 endif
 
@@ -20,8 +20,8 @@ endif
 echo "(famoscomparison.csh) order: ${order}"
 set nbins=$4
 if ($#argv < 4) then
-    echo "(famoscomparison.csh) default bins: 30"
-    set nbins = 30
+    echo "(famoscomparison.csh) default bins: 50"
+    set nbins = 50
 endif
 set min=$5
 if ($#argv < 5) then
@@ -33,121 +33,142 @@ if ($#argv < 6) then
     echo "(famoscomparison.csh) default max: 300"
     set max = 300
 endif
-set sample1=$7
+set logy=$7
 if ($#argv < 7) then
-    echo "(famoscomparison.csh) default sample 1: TtSemiMuEvents_fullsim.root"
-    set sample1 = TtSemiMuEvents_fullsim.root
+    echo "(famoscomparison.csh) default logy: true"
+    set logy = false
 endif
-set sample2=$8
+set sample1=$8
 if ($#argv < 8) then
-    echo "(famoscomparison.csh) default sample 2: TtSemiMuEvents_fastsim.root"
-    set sample2 = TtSemiMuEvents_fastsim.root
+    echo "(famoscomparison.csh) default sample 1: /afs/cern.ch/user/g/giamman/scratch0/data/TQAF_dilep_tt0j_full.root"
+    set sample1 = /afs/cern.ch/user/g/giamman/scratch0/data/TQAF_dilep_tt0j_full.root
+endif
+set sample2=$9
+if ($#argv < 9) then
+    echo "(famoscomparison.csh) default sample 2: /afs/cern.ch/user/g/giamman/scratch0/data/TQAF_dilep_tt0j_fast.root"
+    set sample2 = /afs/cern.ch/user/g/giamman/scratch0/data/TQAF_dilep_tt0j_fast.root
+endif
+set events=$10
+if ($#argv < 10) then
+    echo "(famoscomparison.csh) default number of events: 15000"
+    set events = 15000
 endif
 
 if ( ${object} == bjet ) then
-    set branch = TopJets_selectedTopBJets__TtEventReco.obj
+    set class = TopJet
+    set branch = selectedTopBJets
 else if ( ${object} == e ) then
-    set branch = recoPixelMatchGsfElectronTopLeptons_selectedTopElectrons__TtEventReco.obj
+    set class = TopElectron
+    set branch = selectedTopElectrons
 else if ( ${object} == mu ) then
-    set branch = recoMuonTopLeptons_selectedTopMuons__TtEventReco.obj
+    set class = TopMuon
+    set branch = selectedTopMuons
+else if ( ${object} == met ) then
+    set class = TopMET
+    set branch = selectedTopMETs
 else
     echo "(famoscomparison.csh) unavailable object type ${object}: exiting"
     exit
 endif
 
-set method = "${variable}()"
+set member = `echo "${variable}()"`
 if ( ${variable} == btag ) then
-#    set method = getBDiscriminator\(\"trackCountingJetTags\"\)
-    set method = getBDiscriminator\(\"default\"\)
-#    set method = "dumpBTagLabels()"
-    echo $method
+    set member = `echo getBDiscriminator\( \"trackCountingHighEffJetTags\" \)`
 endif
-
+echo "Plotting member $member"
 
 set macro = FamosComparison.C
 
 if (-f "${macro}") rm ${macro}
 cat > ${macro} <<EOF
-void FamosComparison(TString sample1="${sample1}", TString sample2="${sample2}") {
+{
+if (gSystem->Load("libFWCoreFWLite") == 0) { // if not loaded yet, load it
+  AutoLibraryLoader::enable();
+  gSystem->Load("libDataFormatsFWLite.so");
+}
+#include "DataFormats/FWLite/interface/Handle.h"
 
-  if (gSystem->Load("libFWCoreFWLite") == 0) { // if not loaded yet, load it
-    AutoLibraryLoader::enable();
+gStyle->SetOptStat(0000);
+gStyle->SetCanvasBorderMode(-1);
+gStyle->SetCanvasBorderSize(1);
+gStyle->SetCanvasColor(10);
+
+bool logy=${logy};
+
+TFile file1("${sample1}");
+TFile file2("${sample2}");
+
+fwlite::Event ev1(&file1);
+fwlite::Event ev2(&file2);
+
+int n1=ev1.size();
+int n2=ev2.size();
+
+int maxEv=${events};
+TCanvas* myCanvas = new TCanvas("myCanvas","Jets",100,10,800,800);
+myCanvas->SetFillColor(10);
+myCanvas->cd();
+if (logy) myCanvas->SetLogy();
+
+TH1F* h1 = new TH1F("h1","${variable} of ${object} ${order}",${nbins},${min},${max});
+int counter=0;
+cout << " Opening full simulation sample (" << n1 << " events)" << endl;
+for( ev1.toBegin();
+     ! ev1.atEnd();
+     ++ev1) {
+  counter++;
+  if (counter>maxEv) continue;
+  fwlite::Handle<std::vector<${class}> > objsfull;
+  objsfull.getByLabel(ev1,"${branch}");
+  //now can access data
+  if (objsfull.ptr()->size() > ${index}) {
+    double var = (objsfull.ptr()->at(${index})).${member};
+    h1->Fill(var);
   }
-  
-  gStyle->SetOptStat(0000);
-  gStyle->SetCanvasBorderMode(-1);
-  gStyle->SetCanvasBorderSize(1);
-  gStyle->SetCanvasColor(10);
-  
-  TH1F *h1 = fillHisto(sample1);
-  TH1F *h2 = fillHisto(sample2);
-
-  h1->SetLineColor(2);
-  h2->SetLineColor(4);
-
-  h1->SetLineWidth(3);
-  h2->SetLineWidth(3);
-  
-  TCanvas* myCanvas = new TCanvas("myCanvas","Jets",100,10,800,800);
-  myCanvas->SetFillColor(10);
-  myCanvas->cd();
-
-  h1->DrawCopy("e");
-  h1->DrawCopy("same");
-  h2->DrawCopy("same");
-
-  TLegend *legend = new TLegend(0.80,0.85,0.95,0.95,"","NDC");
-  legend->AddEntry(h1,"full","l");
-  legend->AddEntry(h2,"fast","l");
-  legend->Draw();
-  myCanvas->Update();
- 
-  // output:
-  TString gif("comparison_${variable}_${object}${order}.gif");
-  myCanvas->Print(gif);
-
-  delete h1;
-  delete h2;
 }
 
+h1->SetLineColor(2);
+h1->SetLineWidth(3);
+h1->DrawCopy();
+h1->DrawCopy("e same");
 
-TH1F* fillHisto(TString path)
-{
-  gSystem->Load ("libRFIO.so");
-
-  cout << "Opening " << path << endl;
-  TFile* f = TFile::Open(path);
-  if ( (!f->IsOpen()) || (f->IsZombie()) ) {
-    cout << "File " << path << " not open, exiting." << endl;
-    return 0;
+TH1F* h2 = new TH1F("h2","${variable} of ${object} ${order}",${nbins},${min},${max});
+int counter=0;
+cout << " Opening fast simulation sample (" << n2 << " events)" << endl;
+for( ev2.toBegin();
+     ! ev2.atEnd();
+     ++ev2) {
+  counter++;
+  if (counter>maxEv) continue;
+  fwlite::Handle<std::vector<${class}> > objsfast;
+  objsfast.getByLabel(ev2,"${branch}");
+  //now can access data
+  if (objsfast.ptr()->size() > ${index}) {
+    double var = (objsfast.ptr()->at(${index})).${member};
+    h2->Fill(var);
   }
+}
+h2->SetLineColor(4);
+h2->SetLineWidth(3);
+//normalize to the fullsim area:
+double scale=1.;
+if (h1->Integral()!=0) scale = (h1->Integral()) / (h2->Integral());
+h2->Scale(scale);
+h2->DrawCopy("same");
 
-  TTree * events = (TTree *) f->Get( "Events" );
-  if (events == 0) {
-    cout << "File " << path << " has 0 events, exiting." << endl;
-    return 0;
-  }
 
-  TBranch * branch = events->GetBranch( "${branch}" );
+TLegend *legend = new TLegend(0.80,0.85,0.95,0.95,"","NDC");
+legend->AddEntry(h1,"full","l");
+legend->AddEntry(h2,"fast","l");
+legend->Draw();
+myCanvas->Update();
 
-  vector<TopJet> bjet;
-  vector<TopElectron> e;
-  vector<TopMuon> mu;
+// output:
+TString gif("comparison_${variable}_${object}${order}.gif");
+myCanvas->Print(gif); 
 
-  // Loop over events and fill histogram
-  TH1F* h = new TH1F("h","${variable} of ${object} ${order}",${nbins},${min},${max});
-  int nev = events->GetEntries();
-  for( int ev = 0; ev < nev; ++ev ) { 
-    branch -> SetAddress( & ${object} );
-    branch -> GetEntry( ev );
-
-    if (${object}.size()>${index}) {
-	double var=${object}[${index}].${method};
-	h->Fill(var);
-    }
-  }
-
-  return h;
+delete h1;
+delete h2;
 }
 EOF
 
