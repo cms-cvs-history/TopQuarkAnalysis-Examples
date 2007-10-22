@@ -100,8 +100,8 @@ int main() {
     genEvtB->GetEntry( ev );
     events->GetEntry( ev, 0 );
     if (sols.size()>0) {
-     if (sols[0].getGenEvent().isSemiLeptonic() &&
-         sols[0].getGenEvent().numberOfBQuarks() == 2) {
+     if (sols[0].getGenEvent()->isSemiLeptonic() &&
+         sols[0].getGenEvent()->numberOfBQuarks() == 2) {
 
       //get bestSol
       int bestSol = sols[0].getMCBestJetComb();
