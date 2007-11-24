@@ -13,7 +13,7 @@
 //
 // Original Author:  Shih-Chuan Kao
 //         Created:  Thu Jul 26 13:59:47 CEST 2007
-// $Id: TtEventDummyAnalysis.cc,v 1.1 2007/09/28 12:09:30 lowette Exp $
+// $Id: TtEventDummyAnalysis.cc,v 1.2 2007/10/22 08:24:24 lowette Exp $
 //
 //
 
@@ -39,7 +39,7 @@ TtEventDummyAnalysis::TtEventDummyAnalysis(const edm::ParameterSet& iConfig)
   muonSrc           = iConfig.getParameter<edm::InputTag> ("muonSource");
   electronSrc       = iConfig.getParameter<edm::InputTag> ("electronSource");
   metSrc            = iConfig.getParameter<edm::InputTag> ("metSource");
-  bjetSrc           = iConfig.getParameter<edm::InputTag> ("bjetSource");
+  jetSrc            = iConfig.getParameter<edm::InputTag> ("jetSource");
   evtsols           = iConfig.getParameter<edm::InputTag> ("EvtSolution");
   
 
@@ -103,8 +103,8 @@ TtEventDummyAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup& i
    edm::Handle< std::vector<TopMET> > met;
    iEvent.getByLabel(metSrc, met);
    
-   edm::Handle< std::vector<TopJet> > bjets;
-   iEvent.getByLabel(bjetSrc, bjets);
+   edm::Handle< std::vector<TopJet> > jets;
+   iEvent.getByLabel(jetSrc, jets);
 */
    // get the event solution
    edm::Handle< std::vector<TtSemiEvtSolution> > eSols; 
@@ -237,9 +237,9 @@ TtEventDummyAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup& i
        cout <<"met eta = "<<(*met_i).eta()<<" mother = "<<(*met_i).mother()<<endl;
    }
 
-   for (std::vector<TopJet>::const_iterator jet_i = bjets->begin(); jet_i != bjets->end(); jet_i++)
+   for (std::vector<TopJet>::const_iterator jet_i = jets->begin(); jet_i != jets->end(); jet_i++)
    {
-       cout <<"bjet eta = "<<(*jet_i).eta()<<" mother = "<<(*jet_i).mother()<<endl;
+       cout <<"jet eta = "<<(*jet_i).eta()<<" mother = "<<(*jet_i).mother()<<endl;
    }
 
    cout <<" ============================ " <<endl;
