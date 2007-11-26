@@ -1,15 +1,15 @@
 #! /bin/csh
 
 if ($#argv < 1) then
-    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet] [index] [nbins] [min] [max] [filename1.root] [filename2.root]"
+    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/jet] [index] [nbins] [min] [max] [filename1.root] [filename2.root]"
     exit
 endif
 
 set variable=$1
 set object=$2
 if ($#argv < 2) then
-    echo "(famoscomparison.csh) default object: bjet"
-    set object = bjet
+    echo "(famoscomparison.csh) default object: jet"
+    set object = jet
 endif
 set index=$3
 if ($#argv < 3) then
@@ -44,8 +44,8 @@ if ($#argv < 8) then
     set sample2 = TtSemiMuEvents_fastsim.root
 endif
 
-if ( ${object} == bjet ) then
-    set branch = TopJets_selectedTopBJets__TtEventReco.obj
+if ( ${object} == jet ) then
+    set branch = TopJets_selectedTopJets__TtEventReco.obj
 else if ( ${object} == e ) then
     set branch = recoPixelMatchGsfElectronTopLeptons_selectedTopElectrons__TtEventReco.obj
 else if ( ${object} == mu ) then
@@ -130,7 +130,7 @@ TH1F* fillHisto(TString path)
 
   TBranch * branch = events->GetBranch( "${branch}" );
 
-  vector<TopJet> bjet;
+  vector<TopJet> jet;
   vector<TopElectron> e;
   vector<TopMuon> mu;
 
