@@ -65,8 +65,8 @@ class TtEventDummyAnalysis : public edm::EDAnalyzer {
     edm::InputTag muonSrc;
     edm::InputTag electronSrc;
     edm::InputTag metSrc;
-    edm::InputTag bjetSrc;
-    edm::InputTag bjetObj;
+    edm::InputTag jetSrc;
+    edm::InputTag jetObj;
 
     edm::InputTag evtsols;
 
