@@ -1,15 +1,15 @@
 #! /bin/csh
 
 if ($#argv < 1) then
-    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/jet] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [events]"
+    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet/met] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [label1] [label2] [events]"
     exit
 endif
 
 set variable=$1
 set object=$2
 if ($#argv < 2) then
-    echo "(famoscomparison.csh) default object: jet"
-    set object = jet
+    echo "(famoscomparison.csh) default object: bjet"
+    set object = bjet
 endif
 set index=$3
 if ($#argv < 3) then
@@ -48,15 +48,25 @@ if ($#argv < 9) then
     echo "(famoscomparison.csh) default sample 2: /afs/cern.ch/user/g/giamman/scratch0/data/TQAF_dilep_tt0j_fast.root"
     set sample2 = /afs/cern.ch/user/g/giamman/scratch0/data/TQAF_dilep_tt0j_fast.root
 endif
-set events=$10
+set label1=$10
 if ($#argv < 10) then
-    echo "(famoscomparison.csh) default number of events: 15000"
-    set events = 15000
+    echo "(famoscomparison.csh) default label 1: full"
+    set label1 = full
+endif
+set label2=$11
+if ($#argv < 11) then
+    echo "(famoscomparison.csh) default label 2: fast"
+    set label2 = fast
+endif
+set events=$12
+if ($#argv < 12) then
+    echo "(famoscomparison.csh) default number of events: 5000"
+    set events = 5000
 endif
 
-if ( ${object} == jet ) then
+if ( ${object} == bjet ) then
     set class = TopJet
-    set branch = selectedTopJets
+    set branch = selectedTopBJets
 else if ( ${object} == e ) then
     set class = TopElectron
     set branch = selectedTopElectrons
@@ -74,6 +84,9 @@ endif
 set member = `echo "${variable}()"`
 if ( ${variable} == btag ) then
     set member = `echo getBDiscriminator\( \"trackCountingHighEffJetTags\" \)`
+endif
+if ( ${variable} == chi2 ) then
+    set member = `echo 'track()->chi2()'`
 endif
 echo "Plotting member $member"
 
@@ -95,6 +108,9 @@ gStyle->SetCanvasColor(10);
 
 bool logy=${logy};
 
+TString label1("${label1}");
+TString label2("${label2}");
+
 TFile file1("${sample1}");
 TFile file2("${sample2}");
 
@@ -112,17 +128,17 @@ if (logy) myCanvas->SetLogy();
 
 TH1F* h1 = new TH1F("h1","${variable} of ${object} ${order}",${nbins},${min},${max});
 int counter=0;
-cout << " Opening full simulation sample (" << n1 << " events)" << endl;
+cout << " Opening first sample (" << n1 << " events)" << endl;
 for( ev1.toBegin();
      ! ev1.atEnd();
      ++ev1) {
   counter++;
   if (counter>maxEv) continue;
-  fwlite::Handle<std::vector<${class}> > objsfull;
-  objsfull.getByLabel(ev1,"${branch}");
+  fwlite::Handle<std::vector<${class}> > objs1;
+  objs1.getByLabel(ev1,"${branch}");
   //now can access data
-  if (objsfull.ptr()->size() > ${index}) {
-    double var = (objsfull.ptr()->at(${index})).${member};
+  if (objs1.ptr()->size() > ${index}) {
+    double var = (objs1.ptr()->at(${index})).${member};
     h1->Fill(var);
   }
 }
@@ -134,37 +150,37 @@ h1->DrawCopy("e same");
 
 TH1F* h2 = new TH1F("h2","${variable} of ${object} ${order}",${nbins},${min},${max});
 int counter=0;
-cout << " Opening fast simulation sample (" << n2 << " events)" << endl;
+cout << " Opening second sample (" << n2 << " events)" << endl;
 for( ev2.toBegin();
      ! ev2.atEnd();
      ++ev2) {
   counter++;
   if (counter>maxEv) continue;
-  fwlite::Handle<std::vector<${class}> > objsfast;
-  objsfast.getByLabel(ev2,"${branch}");
+  fwlite::Handle<std::vector<${class}> > objs2;
+  objs2.getByLabel(ev2,"${branch}");
   //now can access data
-  if (objsfast.ptr()->size() > ${index}) {
-    double var = (objsfast.ptr()->at(${index})).${member};
+  if (objs2.ptr()->size() > ${index}) {
+    double var = (objs2.ptr()->at(${index})).${member};
     h2->Fill(var);
   }
 }
 h2->SetLineColor(4);
 h2->SetLineWidth(3);
 //normalize to the fullsim area:
-double scale=1.;
-if (h1->Integral()!=0) scale = (h1->Integral()) / (h2->Integral());
-h2->Scale(scale);
+//double scale=1.;
+//if (h1->Integral()!=0) scale = (h1->Integral()) / (h2->Integral());
+//h2->Scale(scale);
 h2->DrawCopy("same");
 
 
 TLegend *legend = new TLegend(0.80,0.85,0.95,0.95,"","NDC");
-legend->AddEntry(h1,"full","l");
-legend->AddEntry(h2,"fast","l");
+legend->AddEntry(h1,label1,"l");
+legend->AddEntry(h2,label2,"l");
 legend->Draw();
 myCanvas->Update();
 
 // output:
-TString gif("comparison_${variable}_${object}${order}.gif");
+TString gif("comparison_${variable}_${object}${order}_${label1}_vs_${label2}.gif");
 myCanvas->Print(gif); 
 
 delete h1;
