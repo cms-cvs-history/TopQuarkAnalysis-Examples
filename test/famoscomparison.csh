@@ -1,7 +1,7 @@
 #! /bin/csh
 
 if ($#argv < 1) then
-    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet/met] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [label1] [label2] [events]"
+    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet/met] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [label1] [label2] [aod/tqaf] [events]"
     exit
 endif
 
@@ -58,35 +58,75 @@ if ($#argv < 11) then
     echo "(famoscomparison.csh) default label 2: fast"
     set label2 = fast
 endif
-set events=$12
+set format=$12
 if ($#argv < 12) then
+    echo "(famoscomparison.csh) default format: tqaf"
+    set format = tqaf
+endif
+set events=$13
+if ($#argv < 13) then
     echo "(famoscomparison.csh) default number of events: 5000"
     set events = 5000
 endif
 
 if ( ${object} == bjet ) then
-    set class = TopJet
-    set branch = selectedTopBJets
+    if ( ${format} == tqaf ) then
+	set class = TopJet
+	set branch = selectedTopBJets
+    else if ( ${format} == aod ) then
+	set class = reco::CaloJet
+	set branch = iterativeCone5CaloJets
+    else
+	echo "(famoscomparison.csh) unavailable format ${format}: exiting"
+	exit
+    endif
 else if ( ${object} == e ) then
-    set class = TopElectron
-    set branch = selectedTopElectrons
+    if ( ${format} == tqaf ) then
+	set class = TopElectron
+	set branch = selectedTopElectrons
+    else if ( ${format} == aod ) then
+	set class = reco::PixelMatchGsfElectron
+	set branch = pixelMatchGsfElectrons
+    else
+	echo "(famoscomparison.csh) unavailable format ${format}: exiting"
+	exit
+    endif
 else if ( ${object} == mu ) then
-    set class = TopMuon
-    set branch = selectedTopMuons
+    if ( ${format} == tqaf ) then
+	set class = TopMuon
+	set branch = selectedTopMuons
+    else if ( ${format} == aod ) then
+	set class = reco::Muon
+	set branch = muons
+    else
+	echo "(famoscomparison.csh) unavailable format ${format}: exiting"
+	exit
+    endif
 else if ( ${object} == met ) then
-    set class = TopMET
-    set branch = selectedTopMETs
+    if ( ${format} == tqaf ) then
+	set class = TopMET
+	set branch = selectedTopMETs
+    else if ( ${format} == aod ) then
+	set class = reco::CaloMET
+	set branch = met
+    else
+	echo "(famoscomparison.csh) unavailable format ${format}: exiting"
+	exit
+    endif
 else
     echo "(famoscomparison.csh) unavailable object type ${object}: exiting"
     exit
 endif
 
 set member = `echo "${variable}()"`
-if ( ${variable} == btag ) then
+if ( ${variable} == btag ) then ### note: doesn't work for AOD
     set member = `echo getBDiscriminator\( \"trackCountingHighEffJetTags\" \)`
 endif
-if ( ${variable} == chi2 ) then
+if ( ${variable} == chi2 ) then ### note: doesn't work for TQAF
     set member = `echo 'track()->chi2()'`
+endif
+if ( ${variable} == ndof ) then ### note: doesn't work for TQAF
+    set member = `echo 'track()->ndof()'`
 endif
 echo "Plotting member $member"
 
