@@ -1,7 +1,7 @@
 #! /bin/csh
 
 if ($#argv < 1) then
-    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet/met] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [label1] [label2] [aod/tqaf] [events]"
+    echo "(famoscomparison.csh) use: ./famoscomparison.csh [variable] [object = e/mu/bjet/met] [index] [nbins] [min] [max] [logy = true/false] [filename1.root] [filename2.root] [label1] [label2] [aod/tqaf] [events] [cut variable] [min] [max]"
     exit
 endif
 
@@ -35,7 +35,7 @@ if ($#argv < 6) then
 endif
 set logy=$7
 if ($#argv < 7) then
-    echo "(famoscomparison.csh) default logy: true"
+    echo "(famoscomparison.csh) default logy: false"
     set logy = false
 endif
 set sample1=$8
@@ -67,6 +67,21 @@ set events=$13
 if ($#argv < 13) then
     echo "(famoscomparison.csh) default number of events: 5000"
     set events = 5000
+endif
+set cutvariable=$14
+if ($#argv < 14) then
+    echo "(famoscomparison.csh) default cut variable: pt"
+    set cutvariable = pt
+endif
+set cutmin=$15
+if ($#argv < 15) then
+    echo "(famoscomparison.csh) default minimum: 0"
+    set cutmin = 0
+endif
+set cutmax=$16
+if ($#argv < 16) then
+    echo "(famoscomparison.csh) default maximum: 9999"
+    set cutmax = 9999
 endif
 
 if ( ${object} == bjet ) then
@@ -130,6 +145,10 @@ if ( ${variable} == ndof ) then ### note: doesn't work for TQAF
 endif
 echo "Plotting member $member"
 
+set cutmember = `echo "${cutvariable}()"`
+set cutlabel = `echo "${cutmin} < ${cutvariable} < ${cutmax}"`
+echo "Cut: ${cutlabel}"
+
 set macro = FamosComparison.C
 
 if (-f "${macro}") rm ${macro}
@@ -166,7 +185,7 @@ myCanvas->SetFillColor(10);
 myCanvas->cd();
 if (logy) myCanvas->SetLogy();
 
-TH1F* h1 = new TH1F("h1","${variable} of ${object} ${order}",${nbins},${min},${max});
+TH1F* h1 = new TH1F("h1","${variable} of ${object} ${order}, ${cutlabel}",${nbins},${min},${max});
 int counter=0;
 cout << " Opening first sample (" << n1 << " events)" << endl;
 for( ev1.toBegin();
@@ -179,7 +198,8 @@ for( ev1.toBegin();
   //now can access data
   if (objs1.ptr()->size() > ${index}) {
     double var = (objs1.ptr()->at(${index})).${member};
-    h1->Fill(var);
+    double cutvar = (objs1.ptr()->at(${index})).${cutmember};
+    if (cutvar>${cutmin} && cutvar<${cutmax}) h1->Fill(var);
   }
 }
 
@@ -188,7 +208,7 @@ h1->SetLineWidth(3);
 h1->DrawCopy();
 h1->DrawCopy("e same");
 
-TH1F* h2 = new TH1F("h2","${variable} of ${object} ${order}",${nbins},${min},${max});
+TH1F* h2 = new TH1F("h2","${variable} of ${object} ${order}, ${cutlabel}",${nbins},${min},${max});
 int counter=0;
 cout << " Opening second sample (" << n2 << " events)" << endl;
 for( ev2.toBegin();
@@ -201,7 +221,8 @@ for( ev2.toBegin();
   //now can access data
   if (objs2.ptr()->size() > ${index}) {
     double var = (objs2.ptr()->at(${index})).${member};
-    h2->Fill(var);
+    double cutvar = (objs2.ptr()->at(${index})).${cutmember};
+    if (cutvar>${cutmin} && cutvar<${cutmax}) h2->Fill(var);
   }
 }
 h2->SetLineColor(4);
@@ -220,7 +241,7 @@ legend->Draw();
 myCanvas->Update();
 
 // output:
-TString gif("comparison_${variable}_${object}${order}_${label1}_vs_${label2}.gif");
+TString gif("comparison_${variable}_${object}${order}_${label1}_vs_${label2}_${format}.gif");
 myCanvas->Print(gif); 
 
 delete h1;
