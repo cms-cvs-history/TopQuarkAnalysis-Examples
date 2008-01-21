@@ -84,6 +84,11 @@ if ($#argv < 16) then
     set cutmax = 9999
 endif
 
+set count = false
+if ( ${variable} == n ) then
+    set count = true
+endif
+
 if ( ${object} == bjet ) then
     if ( ${format} == tqaf ) then
 	set class = TopJet
@@ -137,10 +142,10 @@ set member = `echo "${variable}()"`
 if ( ${variable} == btag ) then ### note: doesn't work for AOD
     set member = `echo getBDiscriminator\( \"trackCountingHighEffJetTags\" \)`
 endif
-if ( ${variable} == chi2 ) then ### note: doesn't work for TQAF
+if ( ${variable} == chi2 ) then ### note: only muons
     set member = `echo 'track()->chi2()'`
 endif
-if ( ${variable} == ndof ) then ### note: doesn't work for TQAF
+if ( ${variable} == ndof ) then ### note: only muons
     set member = `echo 'track()->ndof()'`
 endif
 echo "Plotting member $member"
@@ -166,6 +171,7 @@ gStyle->SetCanvasBorderSize(1);
 gStyle->SetCanvasColor(10);
 
 bool logy=${logy};
+bool count=${count};
 
 TString label1("${label1}");
 TString label2("${label2}");
@@ -185,7 +191,13 @@ myCanvas->SetFillColor(10);
 myCanvas->cd();
 if (logy) myCanvas->SetLogy();
 
-TH1F* h1 = new TH1F("h1","${variable} of ${object} ${order}, ${cutlabel}",${nbins},${min},${max});
+TString title1;
+if (count) {
+  title1 = "number of ${object}, ${cutlabel}";
+} else {
+  title1 = "${variable} of ${object} ${order}, ${cutlabel}";
+}
+TH1F* h1 = new TH1F("h1",title1,${nbins},${min},${max});
 int counter=0;
 cout << " Opening first sample (" << n1 << " events)" << endl;
 for( ev1.toBegin();
@@ -196,10 +208,19 @@ for( ev1.toBegin();
   fwlite::Handle<std::vector<${class}> > objs1;
   objs1.getByLabel(ev1,"${branch}");
   //now can access data
-  if (objs1.ptr()->size() > ${index}) {
-    double var = (objs1.ptr()->at(${index})).${member};
-    double cutvar = (objs1.ptr()->at(${index})).${cutmember};
-    if (cutvar>${cutmin} && cutvar<${cutmax}) h1->Fill(var);
+  if (count) {
+    int var=0;
+    for (int c=0; c<objs1.ptr()->size(); c++) {
+      double cutvar = (objs1.ptr()->at(c)).${cutmember};
+      if (cutvar>${cutmin} && cutvar<${cutmax}) var++;
+    }
+    h1->Fill(var);
+  } else {
+    if (objs1.ptr()->size() > ${index}) {
+      double var = (objs1.ptr()->at(${index})).${member};
+      double cutvar = (objs1.ptr()->at(${index})).${cutmember};
+      if (cutvar>${cutmin} && cutvar<${cutmax}) h1->Fill(var);
+    }
   }
 }
 
@@ -208,7 +229,13 @@ h1->SetLineWidth(3);
 h1->DrawCopy();
 h1->DrawCopy("e same");
 
-TH1F* h2 = new TH1F("h2","${variable} of ${object} ${order}, ${cutlabel}",${nbins},${min},${max});
+TString title2;
+if (count) {
+  title2 = "number of ${object}, ${cutlabel}";
+} else {
+  title2 = "${variable} of ${object} ${order}, ${cutlabel}";
+}
+TH1F* h2 = new TH1F("h2",title2,${nbins},${min},${max});
 int counter=0;
 cout << " Opening second sample (" << n2 << " events)" << endl;
 for( ev2.toBegin();
@@ -219,10 +246,19 @@ for( ev2.toBegin();
   fwlite::Handle<std::vector<${class}> > objs2;
   objs2.getByLabel(ev2,"${branch}");
   //now can access data
-  if (objs2.ptr()->size() > ${index}) {
-    double var = (objs2.ptr()->at(${index})).${member};
-    double cutvar = (objs2.ptr()->at(${index})).${cutmember};
-    if (cutvar>${cutmin} && cutvar<${cutmax}) h2->Fill(var);
+  if (count) {
+    int var=0;
+    for (int c=0; c<objs2.ptr()->size(); c++) {
+      double cutvar = (objs2.ptr()->at(c)).${cutmember};
+      if (cutvar>${cutmin} && cutvar<${cutmax}) var++;
+    }
+    h2->Fill(var);
+  } else {
+    if (objs2.ptr()->size() > ${index}) {
+      double var = (objs2.ptr()->at(${index})).${member};
+      double cutvar = (objs2.ptr()->at(${index})).${cutmember};
+      if (cutvar>${cutmin} && cutvar<${cutmax}) h2->Fill(var);
+    }
   }
 }
 h2->SetLineColor(4);
@@ -241,7 +277,12 @@ legend->Draw();
 myCanvas->Update();
 
 // output:
-TString gif("comparison_${variable}_${object}${order}_${label1}_vs_${label2}_${format}.gif");
+TString gif;
+if (count) {
+  gif="comparison_${variable}_${object}_${label1}_vs_${label2}_${format}.gif";
+} else {
+  gif="comparison_${variable}_${object}${order}_${label1}_vs_${label2}_${format}.gif";
+}
 myCanvas->Print(gif); 
 
 delete h1;
