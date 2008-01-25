@@ -4,8 +4,8 @@ include "FastSimulation/Configuration/data/CommonInputs.cff"
 # Primary vertex smearing.
 include "IOMC/EventVertexGenerators/data/VtxSmearedGauss.cfi"    
 
-# Conversion to GenParticleCandidates 
-include "PhysicsTools/HepMCCandAlgos/data/genParticleCandidatesFast.cfi" 
+# Conversion to GenParticles 
+include "PhysicsTools/HepMCCandAlgos/data/genParticles.cfi" 
 
 # Famos SimHits producer
 include "FastSimulation/EventProducer/data/FamosSimHits.cff"
@@ -68,7 +68,7 @@ replace towerMaker.hfInput = caloRecHits
 # Jets
 include "Configuration/JetMET/data/calorimetry-jetmet-gen.cff" 
 include "Configuration/JetMET/data/calorimetry-jetmet.cff" 
-replace genParticleCandidates.src="source" 
+replace genParticles.src="source" 
 replace genCandidatesForMET.verbose=false
 
 # Muon parametrization
