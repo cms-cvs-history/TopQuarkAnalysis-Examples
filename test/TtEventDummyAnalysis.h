@@ -15,11 +15,12 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSet/interface/InputTag.h"
 
-#include "AnalysisDataFormats/TopObjects/interface/TopLepton.h" 
-#include "AnalysisDataFormats/TopObjects/interface/TopObject.h" 
-#include "AnalysisDataFormats/TopObjects/interface/TopParticle.h" 
-#include "AnalysisDataFormats/TopObjects/interface/TopMET.h" 
-#include "AnalysisDataFormats/TopObjects/interface/TopJet.h" 
+#include "DataFormats/PatCandidates/interface/PATObject.h"
+#include "DataFormats/PatCandidates/interface/Particle.h"
+#include "DataFormats/PatCandidates/interface/Lepton.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/PatCandidates/interface/MET.h"
+
 #include "AnalysisDataFormats/TopObjects/interface/TtGenEvent.h" 
 #include "AnalysisDataFormats/TopObjects/interface/TtSemiEvtSolution.h" 
 

@@ -13,7 +13,7 @@
 //
 // Original Author:  Shih-Chuan Kao
 //         Created:  Thu Jul 26 13:59:47 CEST 2007
-// $Id: TtEventDummyAnalysis.cc,v 1.2 2007/10/22 08:24:24 lowette Exp $
+// $Id: TtEventDummyAnalysis.cc,v 1.3 2007/11/24 11:23:31 lowette Exp $
 //
 //
 
@@ -94,16 +94,16 @@ TtEventDummyAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
 /*
    // retrieve the reco-objects
-   edm::Handle< std::vector<TopMuon> > muons;
+   edm::Handle< std::vector<pat::Muon> > muons;
    iEvent.getByLabel(muonSrc, muons);
 
-   edm::Handle< std::vector<TopElectron> > electrons;
+   edm::Handle< std::vector<pat::Electron> > electrons;
    iEvent.getByLabel(electronSrc, electrons);
 
-   edm::Handle< std::vector<TopMET> > met;
+   edm::Handle< std::vector<pat::MET> > met;
    iEvent.getByLabel(metSrc, met);
    
-   edm::Handle< std::vector<TopJet> > jets;
+   edm::Handle< std::vector<pat::Jet> > jets;
    iEvent.getByLabel(jetSrc, jets);
 */
    // get the event solution
@@ -222,22 +222,22 @@ TtEventDummyAnalysis::analyze(const edm::Event& iEvent, const edm::EventSetup& i
 
    }
    /*
-   for (std::vector<TopMuon>::const_iterator mu_i = muons->begin(); mu_i != muons->end(); mu_i++)
+   for (std::vector<pat::Muon>::const_iterator mu_i = muons->begin(); mu_i != muons->end(); mu_i++)
    {
        cout <<"mu eta = "<<(*mu_i).eta()<<" mother = "<<(*mu_i).mother()<<endl;
    }
 
-   for (std::vector<TopElectron>::const_iterator e_i = electrons->begin(); e_i != electrons->end(); e_i++)
+   for (std::vector<pat::Electron>::const_iterator e_i = electrons->begin(); e_i != electrons->end(); e_i++)
    {
        cout <<"e eta = "<<(*e_i).eta()<<" mother = "<<(*e_i).mother()<<endl;
    }
 
-   for (std::vector<TopMET>::const_iterator met_i = met->begin(); met_i != met->end(); met_i++)
+   for (std::vector<pat::MET>::const_iterator met_i = met->begin(); met_i != met->end(); met_i++)
    {
        cout <<"met eta = "<<(*met_i).eta()<<" mother = "<<(*met_i).mother()<<endl;
    }
 
-   for (std::vector<TopJet>::const_iterator jet_i = jets->begin(); jet_i != jets->end(); jet_i++)
+   for (std::vector<pat::Jet>::const_iterator jet_i = jets->begin(); jet_i != jets->end(); jet_i++)
    {
        cout <<"jet eta = "<<(*jet_i).eta()<<" mother = "<<(*jet_i).mother()<<endl;
    }
