@@ -1,13 +1,15 @@
 source = PoolSource {
    untracked vstring fileNames =
     {
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/343BBF91-A25A-DC11-8675-001617E30D06.root',
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/58CC66DA-935A-DC11-9F91-000423D99160.root',
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/A08EBBBC-935A-DC11-B80A-001617C3B73A.root',
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/B466D6B0-935A-DC11-806A-000423D99AAE.root',
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/BC256097-A25A-DC11-895F-001617E30CA4.root',
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/D4FBDF71-AA5A-DC11-B051-000423D98520.root',
-      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/E2514242-9B5A-DC11-83F0-000423D952F4.root'
+#"file:/afs/desy.de/user/r/rwolf/cms13/samples/150/ttbar/tt0j152_mt_70_aod_prefiltered5.root"
+"dcap://dcache-ses-cms.desy.de/pnfs/desy.de/cms/tier2/store/CSA07/skim/2008/1/17/CSA07-CSA07Muon-Chowder-A3-PDMuon-ReReco-100pb-Skims4/0000/08A0A10B-25C5-DC11-BE27-001617C3B6B4.root"
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/343BBF91-A25A-DC11-8675-001617E30D06.root',
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/58CC66DA-935A-DC11-9F91-000423D99160.root',
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/A08EBBBC-935A-DC11-B80A-001617C3B73A.root',
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/B466D6B0-935A-DC11-806A-000423D99AAE.root',
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/BC256097-A25A-DC11-895F-001617E30CA4.root',
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/D4FBDF71-AA5A-DC11-B051-000423D98520.root',
+#      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/E2514242-9B5A-DC11-83F0-000423D952F4.root'
 #     "rfio:/castor/cern.ch/cms/store/RelVal/2007/8/2/RelVal-RelVal160pre7TTbar-1186057494/0000/02D85281-1441-DC11-8004-00304885AB72.root"
     }
 
