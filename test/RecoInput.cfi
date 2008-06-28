@@ -1,7 +1,8 @@
 source = PoolSource {
    untracked vstring fileNames =
     {
-"dcap://dcache-ses-cms.desy.de/pnfs/desy.de/cms/tier2/store/CSA07/skim/2008/1/17/CSA07-CSA07Muon-Chowder-A3-PDMuon-ReReco-100pb-Skims4/0000/08A0A10B-25C5-DC11-BE27-001617C3B6B4.root"
+"file:/afs/cern.ch/cms/PRS/top/cmssw-data/relval200-for-pat-testing/FullSimTTbar-210p5.1-AODSIM.100.root"
+#"dcap://dcache-ses-cms.desy.de/pnfs/desy.de/cms/tier2/store/CSA07/skim/2008/1/17/CSA07-CSA07Muon-Chowder-A3-PDMuon-ReReco-100pb-Skims4/0000/08A0A10B-25C5-DC11-BE27-001617C3B6B4.root"
 #      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/343BBF91-A25A-DC11-8675-001617E30D06.root',
 #      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/58CC66DA-935A-DC11-9F91-000423D99160.root',
 #      '/store/RelVal/2007/9/3/RelVal-RelValTTbar-1188837971/0002/A08EBBBC-935A-DC11-B80A-001617C3B73A.root',
@@ -16,4 +17,4 @@ source = PoolSource {
    untracked bool   debugFlag     = true   
 
 }
-   untracked PSet maxEvents = {untracked int32 input = 10}
+   untracked PSet maxEvents = {untracked int32 input = 100}
