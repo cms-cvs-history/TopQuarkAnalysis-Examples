@@ -2,8 +2,10 @@
 <use name=Foundation/PluginManager>
 <use name=FWCore/ParameterSet>
 <use name=AnalysisDataFormats/TopObjects>
+<use name=PhysicsTools/StarterKit>
+<use name=TopQuarkAnalysis/Examples>
 <use name=root>
 
-<library file=TtEventDummyAnalysis.cc name=TtEventDummyAnalysis>
+<library file=*.cc name=TtEventDummyAnalysis>
   <flags EDM_PLUGIN=1>
 </library>
