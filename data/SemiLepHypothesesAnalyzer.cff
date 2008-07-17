@@ -2,9 +2,8 @@
 # initialize analyzers
 # ----------------------------
 
-  module analyzeWMassMaxSumPt = analyzeSemiLepHypotheses from "TopAnalysis/TopAnalyzer/data/SemiLepHypothesesAnalyzer.cfi"
-  module analyzeGenMatch      = analyzeSemiLepHypotheses from "TopAnalysis/TopAnalyzer/data/SemiLepHypothesesAnalyzer.cfi"
-  module analyzeMVADisc       = analyzeSemiLepHypotheses from "TopAnalysis/TopAnalyzer/data/SemiLepHypothesesAnalyzer.cfi"
+  module analyzeWMassMaxSumPt = analyzeHypothesis from "TopQuarkAnalysis/Examples/data/SemiLepHypothesesAnalyzer.cfi"
+  module analyzeGenMatch      = analyzeHypothesis from "TopQuarkAnalysis/Examples/data/SemiLepHypothesesAnalyzer.cfi"
 
 # ----------------------------
 # configure analyzers
@@ -12,10 +11,9 @@
 
   replace analyzeWMassMaxSumPt.hypoKey = ttSemiHypothesisMaxSumPtWMass:Key
   replace analyzeGenMatch.hypoKey      = ttSemiHypothesisGenMatch:Key
-  replace analyzeMVADisc.hypoKey       = ttSemiHypothesisMVADisc:Key
 
 # ----------------------------
 # define sequence
 # ----------------------------
 
-  sequence analyzeAllSemiLepHypotheses = {analyzeWMassMaxSumPt, analyzeGenMatch, analyzeMVADisc}
+  sequence analyzeAllHypotheses = {analyzeWMassMaxSumPt, analyzeGenMatch}
