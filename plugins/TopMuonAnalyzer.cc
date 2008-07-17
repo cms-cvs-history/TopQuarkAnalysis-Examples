@@ -1,4 +1,4 @@
-#include "/afs/cern.ch/user/m/mzeinali/CMSSW_1_6_12/src/TopQuarkAnalysis/Examples/interface/TopMuonAnalyzer.h"
+#include "TopQuarkAnalysis/Examples/interface/TopMuonAnalyzer.h"
 
 //construntor
 TopMuonAnalyzer::TopMuonAnalyzer(const edm::ParameterSet& iConfig)
