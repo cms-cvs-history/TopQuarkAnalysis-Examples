@@ -1,5 +1,4 @@
 module analyzeHypothesis = HypothesisAnalyzer{
-
   InputTag semiEvent = ttSemiEvent
   InputTag hypoKey   = ttSemiHypothesisMaxSumPtWMass:Key
 

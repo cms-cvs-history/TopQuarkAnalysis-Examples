@@ -1,0 +1,4 @@
+module analyzeMuon = TopMuonAnalyzer {
+  InputTag inputElec = selectedLayer1Electrons 
+  InputTag inputMuon = selectedLayer1Muons 
+}

@@ -1,0 +1,3 @@
+module analyzeElec = TopElecAnalyzer {
+  InputTag input = selectedLayer1Electrons 
+}

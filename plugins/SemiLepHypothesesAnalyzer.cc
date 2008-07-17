@@ -1,3 +1,5 @@
+#include "DataFormats/Candidate/interface/Candidate.h"
+#include "AnalysisDataFormats/TopObjects/interface/TtSemiEvent.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "TopQuarkAnalysis/TopTools/interface/TtSemiEvtPartons.h"
 #include "TopQuarkAnalysis/Examples/plugins/SemiLepHypothesesAnalyzer.h"
@@ -19,11 +21,15 @@ SemiLepHypothesesAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup&
   evt.getByLabel(hypoKey_, hypoKeyHandle);
   TtSemiEvent::HypoKey& hypoKey = (TtSemiEvent::HypoKey&) *hypoKeyHandle;
 
+  if( !semiEvt->isHypoAvailable(hypoKey) ){
+    edm::LogWarning ( "NonValidHyp" ) << "Hypothesis not available for this event";
+    return;
+  }
   if( !semiEvt->isHypoValid(hypoKey) ){
     edm::LogWarning ( "NonValidHyp" ) << "Hypothesis not valid for this event";
     return;
   }
-
+  
   const reco::Candidate* hadTop = semiEvt->hadronicTop(hypoKey);
   const reco::Candidate* hadW   = semiEvt->hadronicW  (hypoKey);
   const reco::Candidate* lepTop = semiEvt->leptonicTop(hypoKey);

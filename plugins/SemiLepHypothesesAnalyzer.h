@@ -11,8 +11,6 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "PhysicsTools/UtilAlgos/interface/TFileService.h"
 
-#include "DataFormats/Candidate/interface/Candidate.h"
-#include "AnalysisDataFormats/TopObjects/interface/TtSemiEvent.h"
 
 class SemiLepHypothesesAnalyzer : public edm::EDAnalyzer {
 
