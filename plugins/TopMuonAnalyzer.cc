@@ -4,7 +4,7 @@
 
 
 TopMuonAnalyzer::TopMuonAnalyzer(const edm::ParameterSet& cfg):
-  inputElec_(cfg.getParameter<edm::InputTag>("inputelec")),
+  inputElec_(cfg.getParameter<edm::InputTag>("inputElec")),
   inputMuon_(cfg.getParameter<edm::InputTag>("inputMuon"))
 {
   edm::Service<TFileService> fs;
