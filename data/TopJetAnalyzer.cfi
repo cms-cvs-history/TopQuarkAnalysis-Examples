@@ -1,3 +1,3 @@
-module analyzeJets = TopJetAnalyzer {
+module analyzeJet = TopJetAnalyzer {
   InputTag input = selectedLayer1Jets 
 }
