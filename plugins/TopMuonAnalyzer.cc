@@ -1,4 +1,4 @@
-#include "TopQuarkAnalysis/Examples/interface/TopMuonAnalyzer.h"
+#include "TopQuarkAnalysis/Examples/plugins/TopMuonAnalyzer.h"
 
 //construntor
 TopMuonAnalyzer::TopMuonAnalyzer(const edm::ParameterSet& iConfig)
