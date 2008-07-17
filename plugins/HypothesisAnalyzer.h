@@ -1,5 +1,5 @@
-#ifndef SemiLepHypothesesAnalyzer_h
-#define SemiLepHypothesesAnalyzer_h
+#ifndef HypothesisAnalyzer_h
+#define HypothesisAnalyzer_h
 
 #include "TH1F.h"
 #include "TH2F.h"
@@ -12,12 +12,12 @@
 #include "PhysicsTools/UtilAlgos/interface/TFileService.h"
 
 
-class SemiLepHypothesesAnalyzer : public edm::EDAnalyzer {
+class HypothesisAnalyzer : public edm::EDAnalyzer {
 
  public:
 
-  explicit SemiLepHypothesesAnalyzer(const edm::ParameterSet&);
-  ~SemiLepHypothesesAnalyzer(){};
+  explicit HypothesisAnalyzer(const edm::ParameterSet&);
+  ~HypothesisAnalyzer(){};
   
  private:
 
