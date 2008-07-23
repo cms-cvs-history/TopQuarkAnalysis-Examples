@@ -3,10 +3,10 @@ source = PoolSource {
 # filtered from the Chowder AllEvents sample. It is expected to work with CMSSW_1_6_12
   untracked vstring fileNames = {
 # for a test file from Desy dCach (only available from Desy!) uncomment the following line
-  "dcap://dcache-ses-cms.desy.de/pnfs/desy.de/cms/tier2/store/CSA07/skim/2008/1/17/CSA07-CSA07Muon-Chowder-A3-PDMuon-ReReco-100pb-Skims4/0000/08A0A10B-25C5-DC11-BE27-001617C3B6B4.root"
+# "dcap://dcache-ses-cms.desy.de/pnfs/desy.de/cms/tier2/store/CSA07/skim/2008/1/17/CSA07-CSA07Muon-Chowder-A3-PDMuon-ReReco-100pb-Skims4/0000/08A0A10B-25C5-DC11-BE27-001617C3B6B4.root"
 
 # for a test file from Castor (only from cern!) uncomment the following line 
-# "rfio:/castor/cern.ch/user/r/rwolf/test/CSA07TtbarTestsample.root"
+  "rfio:/castor/cern.ch/user/r/rwolf/test/CSA07TtbarTestsample.root"
   }
   untracked uint32 debugVerbosity = 10
   untracked bool debugFlag = true   
