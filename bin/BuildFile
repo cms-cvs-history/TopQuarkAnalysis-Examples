@@ -15,3 +15,7 @@
 <environment>
  <bin file="TopElecFWLiteAnalyzer.cc"> </bin>
 </environment>
+
+<environment>
+ <bin file="TopJetFWLiteAnalyzer.cc"> </bin>
+</environment>
