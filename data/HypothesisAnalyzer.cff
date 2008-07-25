@@ -1,10 +1,10 @@
 # initialize analyzers
-  module analyzeWMassMaxSumPt = analyzeHypothesis from "TopQuarkAnalysis/Examples/data/HypothesisAnalyzer.cfi"
+  module analyzeMaxSumPtWMass = analyzeHypothesis from "TopQuarkAnalysis/Examples/data/HypothesisAnalyzer.cfi"
   module analyzeGenMatch      = analyzeHypothesis from "TopQuarkAnalysis/Examples/data/HypothesisAnalyzer.cfi"
 
 # configure analyzers
-  replace analyzeWMassMaxSumPt.hypoKey = ttSemiHypothesisMaxSumPtWMass:Key
+  replace analyzeMaxSumPtWMass.hypoKey = ttSemiHypothesisMaxSumPtWMass:Key
   replace analyzeGenMatch.hypoKey      = ttSemiHypothesisGenMatch:Key
 
 # define sequence
-  sequence analyzeAllHypotheses = {analyzeWMassMaxSumPt, analyzeGenMatch}
+  sequence analyzeAllHypotheses = {analyzeMaxSumPtWMass, analyzeGenMatch}
