@@ -5,7 +5,7 @@
 <use name=root> 
 
 <environment>
- <bin file="TtEventDummyAnalyser.cpp"> </bin>
+ <bin file="TopHypothesisFWLiteAnalyzer.cc"> </bin>
 </environment>
 
 <environment>
