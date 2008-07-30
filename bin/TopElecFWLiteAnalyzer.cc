@@ -16,9 +16,12 @@
 
 int main(int argc, char* argv[]) 
 {
-  if( argc<2 ){
-    // -------------------------------------------------  
-    std::cerr << "ERROR:" << " Please specify filepath" << std::endl;
+  if( argc<3 ){
+    // ------------------------------------------------- 
+    std::cerr << "ERROR:: " 
+	      << "Wrong number of arguments! Please specify:" << std::endl
+	      << "        * filepath" << std::endl
+	      << "        * process name" << std::endl; 
     // -------------------------------------------------  
     return -1;
   }
@@ -40,11 +43,22 @@ int main(int argc, char* argv[])
   // -------------------------------------------------  
   std::cout << "open  file: " << argv[1] << std::endl;
   // -------------------------------------------------
-  TFile inFile(argv[1]);
-  TTree* events_ = (TTree*) inFile.Get( "Events" ); assert( events_!=0 );
+  TFile* inFile = TFile::Open(argv[1]);
+  TTree* events_= 0;
+  if( inFile ) inFile->GetObject("Events", events_); 
+  if( events_==0 ){
+    // -------------------------------------------------  
+    std::cerr << "ERROR:: " 
+	      << "Unable to retrieve TTree Events!" << std::endl
+	      << "        Eighter wrong file name or the the tree doesn't exists" << std::endl;
+    // -------------------------------------------------  
+    return -1;
+  }
 
   // acess branch of elecs
-  TBranch* elecs_ = events_->GetBranch( "patElectrons_selectedLayer1Electrons__Test.obj" ); assert( elecs_!=0 );
+  char elecName[50];
+  sprintf(elecName, "patElectrons_selectedLayer1Electrons__%s.obj", argv[2]);
+  TBranch* elecs_ = events_->GetBranch( elecName ); assert( elecs_!=0 );
   
   // loop over events and fill histograms
   std::vector<pat::Electron> elecs;
@@ -77,7 +91,7 @@ int main(int argc, char* argv[])
   // -------------------------------------------------  
   std::cout << "close file" << std::endl;
   // -------------------------------------------------
-  inFile.Close();
+  inFile->Close();
 
   // save histograms to file
   TFile outFile( "analyzeElecs.root", "recreate" );

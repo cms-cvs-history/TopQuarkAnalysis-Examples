@@ -16,32 +16,35 @@
 
 int main(int argc, char* argv[]) 
 {
-  if( argc<3 ){
+  if( argc<4 ){
     // -------------------------------------------------  
     std::cerr << "ERROR:: " 
-	      << "Wrong number of arguments!" << std::endl
-	      << "        Please specify filepath and HypoKey" << std::endl;
+	      << "Wrong number of arguments!" << std::endl 
+	      << "        Please specify:" << std::endl
+	      << "        * filepath" << std::endl
+	      << "        * process name" << std::endl
+	      << "        * HypoKey" << std::endl;
     // -------------------------------------------------  
     return -1;
   }
 
   // parse HypoKey
   TtSemiEvent::HypoKey hypoKey;
-  if(strcmp(argv[1], "kWMassMaxSumPt")) hypoKey = TtSemiEvent::kWMassMaxSumPt; else if
-    (strcmp(argv[1], "kMaxSumPtWMass")) hypoKey = TtSemiEvent::kMaxSumPtWMass; else if
-    (strcmp(argv[1], "kKinFit"       )) hypoKey = TtSemiEvent::kKinFit;        else if
-    (strcmp(argv[1], "kGenMatch"     )) hypoKey = TtSemiEvent::kGenMatch;      else if
-    (strcmp(argv[1], "kMVADisc"      )) hypoKey = TtSemiEvent::kMVADisc; 
+  if(!strcmp(argv[3], "kWMassMaxSumPt")) hypoKey = TtSemiEvent::kWMassMaxSumPt; else if
+    (!strcmp(argv[3], "kMaxSumPtWMass")) hypoKey = TtSemiEvent::kMaxSumPtWMass; else if
+    (!strcmp(argv[3], "kKinFit"       )) hypoKey = TtSemiEvent::kKinFit;        else if
+    (!strcmp(argv[3], "kGenMatch"     )) hypoKey = TtSemiEvent::kGenMatch;      else if
+    (!strcmp(argv[3], "kMVADisc"      )) hypoKey = TtSemiEvent::kMVADisc; 
   else{
     // -------------------------------------------------  
     std::cerr << "ERROR:: " 
 	      << "Unknown HypoKey!" << std::endl
 	      << "        Please specify one out of the following keys:" << std::endl
-	      << "        -kWMassMaxSumPt" << std::endl
-	      << "        -kMaxSumPtWMass" << std::endl
-	      << "        -kKinFit" << std::endl
-	      << "        -kGenMatch" << std::endl
-	      << "        -kMVADisc" << std::endl;
+	      << "        * kWMassMaxSumPt" << std::endl
+	      << "        * kMaxSumPtWMass" << std::endl
+	      << "        * kKinFit" << std::endl
+	      << "        * kGenMatch" << std::endl
+	      << "        * kMVADisc" << std::endl;
     // -------------------------------------------------  
     return -1;
   }
@@ -81,13 +84,19 @@ int main(int argc, char* argv[])
   }
 
   // acess branch of ttSemiEvent
-  TBranch* decay_   = events_->GetBranch( "recoGenParticles_decaySubset__Test.obj" ); // referred to from within TtGenEvent class
+  char decayName[50];
+  sprintf(decayName, "recoGenParticles_decaySubset__%s.obj", argv[2]);
+  TBranch* decay_   = events_->GetBranch( decayName ); // referred to from within TtGenEvent class
   assert( decay_ != 0 ); 
-  TBranch* genEvt_  = events_->GetBranch( "TtGenEvent_genEvt__Test.obj" ); // referred to from within TtSemiEvent class
+  char genEvtName[50];
+  sprintf(genEvtName, "TtGenEvent_genEvt__%s.obj", argv[2]);
+  TBranch* genEvt_  = events_->GetBranch( genEvtName ); // referred to from within TtSemiEvent class
   assert( genEvt_ != 0 ); 
-  TBranch* semiEvt_ = events_->GetBranch( "TtSemiEvent_ttSemiEvent__Test.obj" ); 
+  char semiEvtName[50];
+  sprintf(semiEvtName, "TtSemiEvent_ttSemiEvent__%s.obj", argv[2]);
+  TBranch* semiEvt_ = events_->GetBranch( semiEvtName ); 
   assert( semiEvt_ != 0 );
-
+  
   // loop over events and fill histograms  
   int nevt = events_->GetEntries();
   TtSemiEvent semiEvt;
@@ -104,7 +113,7 @@ int main(int argc, char* argv[])
     events_ ->GetEntry( evt, 0 );
 
     // -------------------------------------------------  
-    /* if(evt>0 && !evt%100) */ std::cout << "  processing event: " << evt << std::endl;
+    if(evt>0 && !evt%100) std::cout << "  processing event: " << evt << std::endl;
     // -------------------------------------------------  
 
     // fill histograms
