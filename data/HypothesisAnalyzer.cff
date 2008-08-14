@@ -3,8 +3,8 @@
   module analyzeGenMatch      = analyzeHypothesis from "TopQuarkAnalysis/Examples/data/HypothesisAnalyzer.cfi"
 
 # configure analyzers
-  replace analyzeMaxSumPtWMass.hypoKey = ttSemiHypothesisMaxSumPtWMass:Key
-  replace analyzeGenMatch.hypoKey      = ttSemiHypothesisGenMatch:Key
+  replace analyzeMaxSumPtWMass.hypoKey = ttSemiLepHypMaxSumPtWMass:Key
+  replace analyzeGenMatch.hypoKey      = ttSemiLepHypGenMatch:Key
 
 # define sequence
   sequence analyzeAllHypotheses = {analyzeMaxSumPtWMass, analyzeGenMatch}
