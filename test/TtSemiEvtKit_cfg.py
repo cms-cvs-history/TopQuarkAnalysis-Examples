@@ -42,7 +42,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 #-------------------------------------------------
 
 ## std sequence for tqaf layer1
-process.load("TopQuarkAnalysis.TopObjectProducers.tqafLayer1_full_cff")
+process.load("TopQuarkAnalysis.TopObjectProducers.tqafLayer1_cff")
 
 ## std sequence for tqaf layer2 for semi-leptonic decays
 process.load("TopQuarkAnalysis.TopEventProducers.tqafLayer2_ttSemiLeptonic_cff")
