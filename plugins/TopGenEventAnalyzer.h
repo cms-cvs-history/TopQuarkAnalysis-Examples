@@ -30,12 +30,15 @@ class TopGenEventAnalyzer : public edm::EDAnalyzer {
   TH1F *topPt_;
   TH1F *topEta_;
   TH1F *topPhi_;
+  TH1F *topMass_;
   TH1F *topBarPt_;
   TH1F *topBarEta_;
   TH1F *topBarPhi_;
+  TH1F *topBarMass_;
   TH1F *ttbarPt_;
   TH1F *ttbarEta_;
   TH1F *ttbarPhi_;
+  TH1F *ttbarMass_;
 };  
 
 #endif  
