@@ -10,13 +10,12 @@ process = cms.Process("TEST")
 ## add message logger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 ## dump content of TopGenEvent
-## process.MessageLogger.categories.append('TopGenEvent:dump')
+process.MessageLogger.categories.append('TopGenEvent:dump')
 ## print final pruned listing of top decay chain
-## process.MessageLogger.categories.append('TopGenEventAnalyzer::selection')
+process.MessageLogger.categories.append('TopGenEventAnalyzer::selection')
 process.MessageLogger.cout = cms.untracked.PSet(
  INFO = cms.untracked.PSet(
-   limit = cms.untracked.int32(0),
-   decayChain = cms.untracked.PSet( limit = cms.untracked.int32(10) )
+   limit = cms.untracked.int32(10),
   )
 )
 
@@ -62,6 +61,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 
 ## std sequence for tqaf layer2 ttGenEvent
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
+## process.decaySubset.addRadiatedGluons = False
 process.load("TopQuarkAnalysis.TopEventProducers.producers.TtDecaySelection_cfi")
 process.ttDecaySelection.src = "genEvt"
 process.ttDecaySelection.allowedTopDecays.decayBranchA.electron = True
