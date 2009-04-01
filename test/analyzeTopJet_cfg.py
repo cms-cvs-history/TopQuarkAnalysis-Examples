@@ -11,9 +11,9 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 ## show JEC from pat jet
 process.MessageLogger.categories.append('TopJetAnalyzer::JEC')
 ## show JetCorrFactors from pat jet
-## process.MessageLogger.categories.append('JetCorrFactors')
+process.MessageLogger.categories.append('JetCorrFactors')
 ## show JetCorrFactorsProducer from pat jet
-## process.MessageLogger.categories.append('JetCorrFactorsProducer')
+process.MessageLogger.categories.append('JetCorrFactorsProducer')
 process.MessageLogger.cout = cms.untracked.PSet(
  INFO = cms.untracked.PSet(
    limit = cms.untracked.int32(0),
@@ -34,7 +34,7 @@ process.source = cms.Source("PoolSource",
 
 ## define maximal number of events to loop over
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1)
+    input = cms.untracked.int32(-1)
 )
 
 ## configure process options
@@ -84,6 +84,8 @@ process.p0   = cms.Path(process.tqafLayer1)
 #-------------------------------------------------
 from TopQuarkAnalysis.Examples.TopJetAnalyzer_cfi import analyzeJet
 process.analyzeJet = analyzeJet
+
+process.jetCorrFactors.sampleType = 0
 
 # register TFileService
 process.TFileService = cms.Service("TFileService",
