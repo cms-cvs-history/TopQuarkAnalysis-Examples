@@ -9,7 +9,7 @@ process = cms.Process("TEST")
 ## configure message logger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 ## show JEC from pat jet
-process.MessageLogger.categories.append('TopJetAnalyzer::JEC')
+process.MessageLogger.categories.append('TopJetAnalyzer_jec')
 ## show JetCorrFactors from pat jet
 process.MessageLogger.categories.append('JetCorrFactors')
 ## show JetCorrFactorsProducer from pat jet
@@ -34,7 +34,7 @@ process.source = cms.Source("PoolSource",
 
 ## define maximal number of events to loop over
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1)
 )
 
 ## configure process options

@@ -35,7 +35,7 @@ TopJetAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup)
 
     // test JEC from PAT
     if(jet == jets->begin()){
-    edm::LogVerbatim log("TopJetAnalyzer::JEC");
+    edm::LogVerbatim log("TopJetAnalyzer_jec");
     jet->jetCorrFactors().print();
     log << "--------------------------------\n";
     log << " Jet Energy Correction Factors: \n";
