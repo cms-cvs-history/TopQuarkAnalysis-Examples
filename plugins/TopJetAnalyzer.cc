@@ -62,7 +62,7 @@ TopJetAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup)
 //     log << "  " << jet->correctedJet("part", "uds").jetCorrName() << ": " << jet->correctedJet("part", "uds").pt() << " (uds   )\n";
 //     log << "  " << jet->correctedJet("part", "c"  ).jetCorrName() << ": " << jet->correctedJet("part", "c"  ).pt() << " (charm )\n";
 //     log << "  " << jet->correctedJet("part", "b"  ).jetCorrName() << ": " << jet->correctedJet("part", "b"  ).pt() << " (beauty)\n";    
-    }
+//    }
     btag_Jets  ->Fill( jet->bDiscriminator("combinedSecondaryVertexBJetTags") );
   }    
 }
