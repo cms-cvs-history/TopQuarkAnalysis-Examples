@@ -6,15 +6,7 @@ process = cms.Process("TEST")
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = cms.untracked.string('INFO')
 ## dump content of TopGenEvent
-process.MessageLogger.categories.append('TopGenEvent:dump')
-## print final pruned listing of top decay chain
-process.MessageLogger.categories = cms.untracked.vstring('TEST')
-process.MessageLogger.categories.append('TopGenEventAnalyzer::selection')
-process.MessageLogger.cout = cms.untracked.PSet(
- INFO = cms.untracked.PSet(
-   limit = cms.untracked.int32(10),
-  )
-)
+process.MessageLogger.categories.append('TopGenEvent')
 
 ## define input
 process.source = cms.Source("PoolSource",

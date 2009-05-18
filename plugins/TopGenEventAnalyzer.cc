@@ -32,11 +32,8 @@ TopGenEventAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup
   edm::Handle<TtGenEvent> genEvent;
   evt.getByLabel(inputGenEvent_, genEvent);
 
-  if(genEvent->isFullLeptonic(true)){
-    genEvent->dumpEventContent();
-    edm::LogVerbatim log("TopGenEventAnalyzer::selection");
-    log << "!!! - is full-leptonic - !!! \n";
-  }
+  // dump content of TopGenEvent
+  genEvent->dumpEventContent();
 
   // fill BR's
   nLep_  ->Fill(genEvent->numberOfLeptons());
