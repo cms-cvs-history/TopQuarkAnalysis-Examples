@@ -34,6 +34,14 @@ process.GlobalTag.globaltag = cms.string('STARTUP_V7::All')
 ## std sequence for pat
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
+## test resolutions
+from PhysicsTools.PatAlgos.recoLayer0.stringResolutions_cff import jetResolution
+process.jetResolution = jetResolution
+
+process.allLayer1Jets.addResolutions = True
+process.allLayer1Jets.resolutions = cms.PSet( default = cms.string("jetResolution") )
+
+
 from TopQuarkAnalysis.Examples.TopJetAnalyzer_cfi import analyzeJet
 process.analyzeJet = analyzeJet
 

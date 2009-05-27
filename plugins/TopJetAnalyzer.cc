@@ -2,6 +2,10 @@
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "TopQuarkAnalysis/Examples/plugins/TopJetAnalyzer.h"
 
+#include "FWCore/Framework/interface/ESHandle.h"
+#include "PhysicsTools/PatAlgos/interface/KinematicResolutionRcd.h"
+#include "PhysicsTools/PatAlgos/interface/KinematicResolutionProvider.h"
+
 
 TopJetAnalyzer::TopJetAnalyzer(const edm::ParameterSet& cfg):
   input_(cfg.getParameter<edm::InputTag>("input"))
@@ -25,7 +29,12 @@ TopJetAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup)
 {
   edm::Handle<std::vector<pat::Jet> > jets;
   evt.getByLabel(input_, jets); 
-  
+ 
+  // to test resolutions
+  edm::ESHandle<KinematicResolutionProvider> provider;
+  setup.get<KinematicResolutionRcd>().get("jetResolution", provider);
+  provider->setup(setup); // this might be needed for some providers
+ 
   Num_Jets->Fill( jets->size());
   for( std::vector<pat::Jet>::const_iterator jet=jets->begin(); jet!=jets->end(); ++jet){
     pt_Jets    ->Fill( jet->pt()    );
@@ -33,36 +42,36 @@ TopJetAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup)
     eta_Jets   ->Fill( jet->eta()   );
     phi_Jets   ->Fill( jet->phi()   );
 
-//     // test JEC from PAT
-//     if(jet == jets->begin()){
-//     edm::LogVerbatim log("TopJetAnalyzer_jec");
-//     //jet->jetCorrFactors().print();
-//     log << "--------------------------------\n";
-//     log << " Jet Energy Correction Factors: \n";
-//     log << "--------------------------------\n";
-//     // uncomment for use with PATv1
-//     // log << "  " << jet->jetCorrName() << ": " << jet->pt() << " (default) \n";
-//     // uncomment for use with PATv2
-//     log << "  " << jet->corrStep() << ": " << jet->pt() << " (default) \n";
-//     log << "--------------------------------\n";
-//     log << "  " << jet->correctedJet("raw")        .jetCorrName() << ": " << jet->correctedJet("raw")        .pt() << "\n";
-//     log << "  " << jet->correctedJet("off")        .jetCorrName() << ": " << jet->correctedJet("off")        .pt() << "\n";
-//     log << "  " << jet->correctedJet("rel")        .jetCorrName() << ": " << jet->correctedJet("rel")        .pt() << "\n";
-//     log << "  " << jet->correctedJet("abs")        .jetCorrName() << ": " << jet->correctedJet("abs")        .pt() << "\n";
-//     log << "  " << jet->correctedJet("emf")        .jetCorrName() << ": " << jet->correctedJet("emf")        .pt() << "\n";
-//     log << "  " << jet->correctedJet("had",  "glu").jetCorrName() << ": " << jet->correctedJet("had",  "glu").pt() << " (gluon )\n";
-//     log << "  " << jet->correctedJet("had",  "uds").jetCorrName() << ": " << jet->correctedJet("had",  "uds").pt() << " (uds   )\n";
-//     log << "  " << jet->correctedJet("had",  "c"  ).jetCorrName() << ": " << jet->correctedJet("had",  "c"  ).pt() << " (charm )\n";
-//     log << "  " << jet->correctedJet("had",  "b"  ).jetCorrName() << ": " << jet->correctedJet("had",  "b"  ).pt() << " (beauty)\n";
-//     log << "  " << jet->correctedJet("ue",   "glu").jetCorrName() << ": " << jet->correctedJet("ue",   "glu").pt() << " (gluon )\n";
-//     log << "  " << jet->correctedJet("ue",   "uds").jetCorrName() << ": " << jet->correctedJet("ue",   "uds").pt() << " (uds   )\n";
-//     log << "  " << jet->correctedJet("ue",   "c"  ).jetCorrName() << ": " << jet->correctedJet("ue",   "c"  ).pt() << " (charm )\n";
-//     log << "  " << jet->correctedJet("ue",   "b"  ).jetCorrName() << ": " << jet->correctedJet("ue",   "b"  ).pt() << " (beauty)\n";
-//     log << "  " << jet->correctedJet("part", "glu").jetCorrName() << ": " << jet->correctedJet("part", "glu").pt() << " (gluon )\n";
-//     log << "  " << jet->correctedJet("part", "uds").jetCorrName() << ": " << jet->correctedJet("part", "uds").pt() << " (uds   )\n";
-//     log << "  " << jet->correctedJet("part", "c"  ).jetCorrName() << ": " << jet->correctedJet("part", "c"  ).pt() << " (charm )\n";
-//     log << "  " << jet->correctedJet("part", "b"  ).jetCorrName() << ": " << jet->correctedJet("part", "b"  ).pt() << " (beauty)\n";    
-//    }
+    std::cout << "test resolution A: " << provider->getResolution(*jet).resolEt(jet->p4()) << std::endl;
+    std::cout << "test resolution B: " << jet->resolEt() << std::endl;
+
+
+    // test JEC from PAT
+    if(jet == jets->begin()){
+    edm::LogVerbatim log("TopJetAnalyzer_jec");
+    log << "--------------------------------\n";
+    log << " Jet Energy Correction Factors: \n";
+    log << "--------------------------------\n";
+    log << "  " << jet->corrStep() << ": " << jet->pt() << " (default) \n";
+    log << "--------------------------------\n";
+    log << "  " << jet->correctedJet("raw")        .corrStep() << ": " << jet->correctedJet("raw")        .pt() << "\n";
+    log << "  " << jet->correctedJet("off")        .corrStep() << ": " << jet->correctedJet("off")        .pt() << "\n";
+    log << "  " << jet->correctedJet("rel")        .corrStep() << ": " << jet->correctedJet("rel")        .pt() << "\n";
+    log << "  " << jet->correctedJet("abs")        .corrStep() << ": " << jet->correctedJet("abs")        .pt() << "\n";
+    log << "  " << jet->correctedJet("emf")        .corrStep() << ": " << jet->correctedJet("emf")        .pt() << "\n";
+    log << "  " << jet->correctedJet("had",  "glu").corrStep() << ": " << jet->correctedJet("had",  "glu").pt() << " (gluon )\n";
+    log << "  " << jet->correctedJet("had",  "uds").corrStep() << ": " << jet->correctedJet("had",  "uds").pt() << " (uds   )\n";
+    log << "  " << jet->correctedJet("had",  "c"  ).corrStep() << ": " << jet->correctedJet("had",  "c"  ).pt() << " (charm )\n";
+    log << "  " << jet->correctedJet("had",  "b"  ).corrStep() << ": " << jet->correctedJet("had",  "b"  ).pt() << " (beauty)\n";
+    log << "  " << jet->correctedJet("ue",   "glu").corrStep() << ": " << jet->correctedJet("ue",   "glu").pt() << " (gluon )\n";
+    log << "  " << jet->correctedJet("ue",   "uds").corrStep() << ": " << jet->correctedJet("ue",   "uds").pt() << " (uds   )\n";
+    log << "  " << jet->correctedJet("ue",   "c"  ).corrStep() << ": " << jet->correctedJet("ue",   "c"  ).pt() << " (charm )\n";
+    log << "  " << jet->correctedJet("ue",   "b"  ).corrStep() << ": " << jet->correctedJet("ue",   "b"  ).pt() << " (beauty)\n";
+    log << "  " << jet->correctedJet("part", "glu").corrStep() << ": " << jet->correctedJet("part", "glu").pt() << " (gluon )\n";
+    log << "  " << jet->correctedJet("part", "uds").corrStep() << ": " << jet->correctedJet("part", "uds").pt() << " (uds   )\n";
+    log << "  " << jet->correctedJet("part", "c"  ).corrStep() << ": " << jet->correctedJet("part", "c"  ).pt() << " (charm )\n";
+    log << "  " << jet->correctedJet("part", "b"  ).corrStep() << ": " << jet->correctedJet("part", "b"  ).pt() << " (beauty)\n";    
+   }
     btag_Jets  ->Fill( jet->bDiscriminator("combinedSecondaryVertexBJetTags") );
   }    
 }
