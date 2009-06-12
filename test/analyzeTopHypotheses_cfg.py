@@ -5,19 +5,20 @@ process = cms.Process("TEST")
 ## configure message logger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = cms.untracked.string('INFO')
-process.MessageLogger.categories = cms.untracked.vstring('TEST')
 process.MessageLogger.categories.append('TtSemiLeptonicEvent')
+process.MessageLogger.categories.append('HypothesisAnalyzer')
 process.MessageLogger.cerr.INFO = cms.untracked.PSet(
     default             = cms.untracked.PSet( limit = cms.untracked.int32( 0) ),
     TtSemiLeptonicEvent = cms.untracked.PSet( limit = cms.untracked.int32(-1) ),
+    HypothesisAnalyzer  = cms.untracked.PSet( limit = cms.untracked.int32(-1) ),
 )
 
 ## define input
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-    'file:/afs/cern.ch/cms/PRS/top/cmssw-data/relval200-for-pat-testing/FullSimTTBar-2_2_X_2008-11-03-STARTUP_V7-AODSIM.100.root'
+    'rfio:/castor/cern.ch/user/r/rwolf/test/patTuple_PATv2_ttbar_tauola_1.root'
      ),
-     skipEvents = cms.untracked.uint32(0)                            
+     skipEvents = cms.untracked.uint32(0)
 )
 
 ## define maximal number of events to loop over
@@ -30,20 +31,15 @@ process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(False)
 )
 
-## configure geometry & conditions
-process.load("Configuration.StandardSequences.Geometry_cff")
-process.load("Configuration.StandardSequences.MagneticField_cff")
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string('STARTUP_V7::All')
+## simple event selection for semileptonic ttbar events with an isolated muon
+process.load("TopQuarkAnalysis.Examples.TtSemiLepEvtSelection_cff")
 
-## std sequence for pat
-process.load("PhysicsTools.PatAlgos.patSequences_cff")
-
-## sequences for ttGenEvent and TtSemiLeptonicEvent
+## sequence for the ttGenEvent
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
+
+## sequence for the ttSemiLepEvent
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttSemiLepEvtBuilder_cff")
-## enable additional per-event printout from the TtSemiLeptonicEvent
-#process.ttSemiLepEvent.verbosity = 1
+process.ttSemiLepEvent.verbosity = 1
 ## change maximum number of jets taken into account per event (default: 4)
 #process.ttSemiLepEvent.maxNJets = 5
 
@@ -56,7 +52,7 @@ process.TFileService = cms.Service("TFileService",
 )
 
 ## end path   
-process.p1 = cms.Path(process.patDefaultSequence *
+process.p1 = cms.Path(process.ttSemiLepEvtSelection *
                       process.makeGenEvt *
                       process.makeTtSemiLepEvent *
                       process.analyzeAllHypotheses)
