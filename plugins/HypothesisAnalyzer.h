@@ -2,6 +2,7 @@
 #define HypothesisAnalyzer_h
 
 #include "TH1F.h"
+#include "TH2F.h"
 
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 
@@ -36,6 +37,12 @@ class HypothesisAnalyzer : public edm::EDAnalyzer {
   TH1F* hadTopPullPt_;
   TH1F* hadTopPullEta_;
   TH1F* hadTopPullMass_;
+
+  TH1F* genMatchDr_;
+  TH1F* mvaDisc_;
+
+  TH2F* genMatchDrVsHadTopPullMass_;
+  TH2F* mvaDiscVsHadTopPullMass_;
 
 };
 

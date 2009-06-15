@@ -14,7 +14,7 @@ process.MessageLogger.cerr.INFO = cms.untracked.PSet(
 ## define input
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-    'rfio:/castor/cern.ch/user/r/rwolf/test/patTuple_PATv2_ttbar_tauola_1.root'
+    'rfio:/castor/cern.ch/user/r/rwolf/test/patTuple_PATv2_ttbar_tauola_2.root'
      ),
      skipEvents = cms.untracked.uint32(0)
 )

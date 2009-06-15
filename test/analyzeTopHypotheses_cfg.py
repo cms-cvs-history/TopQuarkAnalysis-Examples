@@ -42,6 +42,8 @@ process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttSemiLepEvtBuilder_c
 process.ttSemiLepEvent.verbosity = 1
 ## change maximum number of jets taken into account per event (default: 4)
 #process.ttSemiLepEvent.maxNJets = 5
+## change jet-parton matching algorithm
+#process.ttSemiLepJetPartonMatch.algorithm = "unambiguousOnly"
 
 ## load HypothesisAnalyzer
 process.load("TopQuarkAnalysis.Examples.HypothesisAnalyzer_cff")

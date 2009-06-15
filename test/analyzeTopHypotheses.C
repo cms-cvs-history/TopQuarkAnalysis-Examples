@@ -3,11 +3,12 @@
 #include <TCanvas.h>
 #include <TFile.h>
 #include <TH1F.h>
+#include <TH2F.h>
 #include <THStack.h>
 #include <TLegend.h>
 #include <TROOT.h>
 
-void setHistoStyle(TH1F* hist, unsigned int i);
+void setHistoStyle(TH1* hist, unsigned int i, bool norm = false);
 
 void drawStack(THStack* stack, TH1F* hist);
 
@@ -61,6 +62,12 @@ void analyzeTopHypotheses()
     hadTopPullMass[i] = (TH1F*) file->Get(directories[i]+"/hadTopPullMass")->Clone();
   }
 
+  TH1F* genMatchDr = (TH1F*) file->Get("analyzeGenMatch/genMatchDr")->Clone();
+  TH1F* mvaDisc    = (TH1F*) file->Get("analyzeMVADisc/mvaDisc"    )->Clone();
+
+  TH2F* genMatchDrVsHadTopPullMass = (TH2F*) file->Get("analyzeGenMatch/genMatchDrVsHadTopPullMass")->Clone();
+  TH2F* mvaDiscVsHadTopPullMass    = (TH2F*) file->Get("analyzeMVADisc/mvaDiscVsHadTopPullMass"    )->Clone();
+
   // close input file
 
   file->Close();
@@ -72,18 +79,32 @@ void analyzeTopHypotheses()
     setHistoStyle(hadWEta [i], i);
     setHistoStyle(hadWMass[i], i);
 
-    setHistoStyle(hadWPullPt  [i], i);
-    setHistoStyle(hadWPullEta [i], i);
-    setHistoStyle(hadWPullMass[i], i);
+    setHistoStyle(hadWPullPt  [i], i, true);
+    setHistoStyle(hadWPullEta [i], i, true);
+    setHistoStyle(hadWPullMass[i], i, true);
 
     setHistoStyle(hadTopPt  [i], i);
     setHistoStyle(hadTopEta [i], i);
     setHistoStyle(hadTopMass[i], i);
 
-    setHistoStyle(hadTopPullPt  [i], i);
-    setHistoStyle(hadTopPullEta [i], i);
-    setHistoStyle(hadTopPullMass[i], i);
+    setHistoStyle(hadTopPullPt  [i], i, true);
+    setHistoStyle(hadTopPullEta [i], i, true);
+    setHistoStyle(hadTopPullMass[i], i, true);
   }
+
+  setHistoStyle(genMatchDr, 0);
+  setHistoStyle(mvaDisc, 2);
+
+  setHistoStyle(genMatchDrVsHadTopPullMass, 0);
+  setHistoStyle(mvaDiscVsHadTopPullMass, 2);
+
+  genMatchDrVsHadTopPullMass->SetFillStyle(0);
+
+  genMatchDrVsHadTopPullMass->SetXTitle("(M_{rec}-M_{gen})/M_{gen} (t_{had})");
+  genMatchDrVsHadTopPullMass->SetYTitle("GenMatch #Sigma #Delta R");
+
+  mvaDiscVsHadTopPullMass->SetXTitle("(M_{rec}-M_{gen})/M_{gen} (t_{had})");
+  mvaDiscVsHadTopPullMass->SetYTitle("MVA discriminator");
 
   // use THStack to create histogram collections
 
@@ -123,11 +144,11 @@ void analyzeTopHypotheses()
 
   // create a legend
 
-  TLegend *legend = new TLegend(0.45, 0.6, 0.9, 0.9);
+  TLegend *legend = new TLegend(0.45, 0.65, 0.9, 0.9);
   legend->SetFillStyle(0);
   legend->AddEntry(hadWPt[0], "GenMatch"     , "F");
-  legend->AddEntry(hadWPt[1], "MaxSumPtWMass", "F");
-  legend->AddEntry(hadWPt[2], "MVADisc"      , "F");
+  legend->AddEntry(hadWPt[1], "MaxSumPtWMass", "L");
+  legend->AddEntry(hadWPt[2], "MVADisc"      , "L");
 
   // draw canvas for the hadronic W
 
@@ -177,26 +198,61 @@ void analyzeTopHypotheses()
   canvasHadTop->cd(6);
   drawStack(stackHadTopPullMass, hadTopPullMass[0]);
 
+  // draw canvas with quality criteria of GenMatch and MVADisc hypotheses
+
+  TCanvas* canvasQuali = new TCanvas("canvasQuali", "quality criteria of hypotheses", 900, 600);
+  canvasQuali->Divide(3,2);
+
+  canvasQuali->cd(1);
+  genMatchDr->Draw();
+
+  canvasQuali->cd(2);
+  genMatchDrVsHadTopPullMass->Draw("box");
+
+  canvasQuali->cd(4);
+  mvaDisc->Draw();
+
+  canvasQuali->cd(5);
+  mvaDiscVsHadTopPullMass->Draw("box");
+
+  // write postscript file
+
+  canvasHadW  ->Print("analyzeTopHypotheses.ps(");
+  canvasHadTop->Print("analyzeTopHypotheses.ps");
+  canvasQuali ->Print("analyzeTopHypotheses.ps)");
+
 }
 
-void setHistoStyle(TH1F* hist, unsigned int i) {
+void setHistoStyle(TH1* hist, unsigned int i, bool norm) {
 
   int lineColors[3] = {kGreen+1, kBlue, kRed};
+  int lineStyles[3] = {1, 3, 1};
   int fillColors[3] = {kGreen+1, kBlue, 0};
-  int fillStyles[3] = {3554, 3545, 0};
+  int fillStyles[3] = {3554, 0, 0};
 
   hist->SetLineWidth(2);
   hist->SetLineColor(lineColors[i]);
+  hist->SetLineStyle(lineStyles[i]);
   hist->SetFillColor(fillColors[i]);
   hist->SetFillStyle(fillStyles[i]);
+
+  hist->SetXTitle(hist->GetTitle());
+  hist->SetYTitle("events");
+  hist->SetTitle("");
+  hist->SetStats(kFALSE);
+
+  if(norm) {
+    hist->Scale(1./hist->Integral());
+    hist->SetYTitle("a.u.");
+  }
 
 }
 
 void drawStack(THStack* stack, TH1F* hist) {
 
   stack->Draw("nostack");
-  stack->GetXaxis()->SetTitle(hist->GetTitle());
-  stack->GetYaxis()->SetTitle("events");
+  stack->GetXaxis()->SetTitle(hist->GetXaxis()->GetTitle());
+  stack->GetYaxis()->SetTitle(hist->GetYaxis()->GetTitle());
   stack->Draw("nostack");
 
 }
