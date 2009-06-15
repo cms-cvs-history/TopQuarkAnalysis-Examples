@@ -54,8 +54,8 @@ process.TFileService = cms.Service("TFileService",
 )
 
 ## end path   
-process.p1 = cms.Path(process.ttSemiLepEvtSelection *
-                      process.makeGenEvt *
-                      process.makeTtSemiLepEvent *
-                      process.analyzeAllHypotheses)
+process.path = cms.Path(process.ttSemiLepEvtSelection *
+                        process.makeGenEvt *
+                        process.makeTtSemiLepEvent *
+                        process.analyzeHypotheses)
 

@@ -13,11 +13,11 @@ analyzeMaxSumPtWMass = analyzeHypothesis.clone()
 analyzeMVADisc       = analyzeHypothesis.clone()
 
 # configure analyzers
-analyzeGenMatch.hypoClassKey      = 'ttSemiLepHypGenMatch:Key'
-analyzeMaxSumPtWMass.hypoClassKey = 'ttSemiLepHypMaxSumPtWMass:Key'
-analyzeMVADisc.hypoClassKey       = 'ttSemiLepHypMVADisc:Key'
+analyzeGenMatch.hypoClassKey      = "ttSemiLepHypGenMatch:Key"
+analyzeMaxSumPtWMass.hypoClassKey = "ttSemiLepHypMaxSumPtWMass:Key"
+analyzeMVADisc.hypoClassKey       = "ttSemiLepHypMVADisc:Key"
 
 # define sequence
-analyzeAllHypotheses = cms.Sequence(analyzeGenMatch *
-                                    analyzeMaxSumPtWMass *
-                                    analyzeMVADisc)
+analyzeHypotheses = cms.Sequence(analyzeGenMatch *
+                                 analyzeMaxSumPtWMass *
+                                 analyzeMVADisc)
