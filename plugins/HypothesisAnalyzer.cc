@@ -29,10 +29,6 @@ HypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setu
   // check if hypothesis is available and valid in this event
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  if( !semiLepEvt->isHypoAvailable(hypoClassKey) ){
-    edm::LogInfo("HypothesisAnalyzer") << "Hypothesis not available for this event";
-    return;
-  }
   if( !semiLepEvt->isHypoValid(hypoClassKey) ){
     edm::LogInfo("HypothesisAnalyzer") << "Hypothesis not valid for this event";
     return;
