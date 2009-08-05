@@ -33,7 +33,7 @@ TopGenEventAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup
   evt.getByLabel(inputGenEvent_, genEvent);
 
   // dump content of TopGenEvent
-  genEvent->dumpEventContent();
+  genEvent->print();
 
   // fill BR's
   nLep_  ->Fill(genEvent->numberOfLeptons());
