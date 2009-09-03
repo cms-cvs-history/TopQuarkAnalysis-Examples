@@ -9,11 +9,16 @@ process.MessageLogger.categories.append('TtSemiLeptonicEvent')
 process.MessageLogger.cerr.TtSemiLeptonicEvent = cms.untracked.PSet(
     limit = cms.untracked.int32(-1)
 )
+process.MessageLogger.cerr.FwkReport.reportEvery = 10
 
 ## define input
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-    '/store/relval/CMSSW_3_1_0_pre10/RelValTTbar/GEN-SIM-RECO/IDEAL_31X_v1/0008/CC80B73A-CA57-DE11-BC2F-000423D99896.root'
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_11.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_12.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_13.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_14.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_15.root'
      ),
      skipEvents = cms.untracked.uint32(0)                            
 )
@@ -34,9 +39,6 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.GlobalTag.globaltag = cms.string('MC_31X_V1::All')
 
-## std sequence for pat
-process.load("PhysicsTools.PatAlgos.patSequences_cff")
-
 ## sequences for ttGenEvent and TtSemiLeptonicEvent
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttSemiLepEvtBuilder_cff")
@@ -56,7 +58,6 @@ process.TFileService = cms.Service("TFileService",
 )
 
 ## end path   
-process.path = cms.Path(process.patDefaultSequence *
-                        process.makeGenEvt *
+process.path = cms.Path(process.makeGenEvt *
                         process.makeTtSemiLepEvent *
                         process.analyzeHypotheses)
