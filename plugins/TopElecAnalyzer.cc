@@ -150,77 +150,77 @@ TopElecAnalyzer::analyze(const edm::Event& evt, const edm::EventSetup& setup)
       genElec_->Fill( (elec->gsfTrack()->pt() - elec->genLepton()->pt())/elec->genLepton()->pt() );
     }
 
-    // --------------------------------------------------
-    // Isolation in the tracker
-    // --------------------------------------------------
+//     // --------------------------------------------------
+//     // Isolation in the tracker
+//     // --------------------------------------------------
 
-    const reco::IsoDeposit *TID=0;
-    TID = elec->trackerIsoDeposit();
+//     const reco::IsoDeposit *TID=0;
+//     TID = elec->trackerIsoDeposit();
    
-    //Isolation Cone coordinates
-    //double IsoCone_eta=TID->eta();
-    //double IsoCone_phi=TID->phi();
+//     //Isolation Cone coordinates
+//     //double IsoCone_eta=TID->eta();
+//     //double IsoCone_phi=TID->phi();
     
     
-    //Veto Cone coordinates
-    //double VetoCone_eta =TID->veto().vetoDir.eta();
-    //double VetoCone_phi =TID->veto().vetoDir.phi();
-    //float  VetoCone_size=TID->veto().dR;
+//     //Veto Cone coordinates
+//     //double VetoCone_eta =TID->veto().vetoDir.eta();
+//     //double VetoCone_phi =TID->veto().vetoDir.phi();
+//     //float  VetoCone_size=TID->veto().dR;
     
    
-    //get the candidate tag
-    //float Cand_Tag_T =TID->candEnergy();
+//     //get the candidate tag
+//     //float Cand_Tag_T =TID->candEnergy();
     
-    //get the deposit & count within the isolation cone with the different cone size
-    double radius=0.0;
-    for(int i=0;i<6;i++)
-      {
+//     //get the deposit & count within the isolation cone with the different cone size
+//     double radius=0.0;
+//     for(int i=0;i<6;i++)
+//       {
 
-       radius+=0.05;
-       CountInSize_T->Fill(radius,TID->depositAndCountWithin(radius).second);
-       DepoInSize_T ->Fill(radius,TID->depositAndCountWithin(radius).first);
+//        radius+=0.05;
+//        CountInSize_T->Fill(radius,TID->depositAndCountWithin(radius).second);
+//        DepoInSize_T ->Fill(radius,TID->depositAndCountWithin(radius).first);
 
-       //If the deposit should exceed some threshold
-       double Threshold=0.3;
-       Count_Threshold_T->Fill(radius,TID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).second);
-       Depo_Threshold_T ->Fill(radius,TID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).first);
+//        //If the deposit should exceed some threshold
+//        double Threshold=0.3;
+//        Count_Threshold_T->Fill(radius,TID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).second);
+//        Depo_Threshold_T ->Fill(radius,TID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).first);
  
-     }
+//      }
 
-    // --------------------------------------------------
-    // Isolation in the ecal & hcal
-    // --------------------------------------------------
-    const reco::IsoDeposit *EID=0;
-    const reco::IsoDeposit *HID=0;
-    EID = elec->ecalIsoDeposit();
-    HID = elec->hcalIsoDeposit();
-
-
-    //get the candidate tag
-    //float Cand_Tag_E =EID->candEnergy();
-    //float Cand_Tag_H =HID->candEnergy();
+//     // --------------------------------------------------
+//     // Isolation in the ecal & hcal
+//     // --------------------------------------------------
+//     const reco::IsoDeposit *EID=0;
+//     const reco::IsoDeposit *HID=0;
+//     EID = elec->ecalIsoDeposit();
+//     HID = elec->hcalIsoDeposit();
 
 
-    //get the deposit & count within the isolation cone with the different cone size
-    for(int i=1;i<30;i++)
-      {
+//     //get the candidate tag
+//     //float Cand_Tag_E =EID->candEnergy();
+//     //float Cand_Tag_H =HID->candEnergy();
 
-       double radius=i/100;
-       CountInSize_E->Fill(radius,EID->depositAndCountWithin(radius).second);
-       DepoInSize_E ->Fill(radius,EID->depositAndCountWithin(radius).first);
 
-       CountInSize_H->Fill(radius,HID->depositAndCountWithin(radius).second);
-       DepoInSize_H ->Fill(radius,HID->depositAndCountWithin(radius).first);
+//     //get the deposit & count within the isolation cone with the different cone size
+//     for(int i=1;i<30;i++)
+//       {
 
-       //If the deposit should exceed some threshold
-       double Threshold=0.3;
-       Count_Threshold_E->Fill(radius,EID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).second);
-       Depo_Threshold_E ->Fill(radius,EID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).first);
+//        double radius=i/100;
+//        CountInSize_E->Fill(radius,EID->depositAndCountWithin(radius).second);
+//        DepoInSize_E ->Fill(radius,EID->depositAndCountWithin(radius).first);
 
-       Count_Threshold_H->Fill(radius,HID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).second);
-       Depo_Threshold_H ->Fill(radius,HID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).first);
+//        CountInSize_H->Fill(radius,HID->depositAndCountWithin(radius).second);
+//        DepoInSize_H ->Fill(radius,HID->depositAndCountWithin(radius).first);
+
+//        //If the deposit should exceed some threshold
+//        double Threshold=0.3;
+//        Count_Threshold_E->Fill(radius,EID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).second);
+//        Depo_Threshold_E ->Fill(radius,EID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).first);
+
+//        Count_Threshold_H->Fill(radius,HID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).second);
+//        Depo_Threshold_H ->Fill(radius,HID->depositAndCountWithin(radius,reco::IsoDeposit::Vetos(),Threshold).first);
        
-      }
+//       }
 
   }
 }
