@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
   if     (!strcmp(argv[3], "kWMassMaxSumPt")) hypoClassKey = TtEvent::kWMassMaxSumPt;
   else if(!strcmp(argv[3], "kMaxSumPtWMass")) hypoClassKey = TtEvent::kMaxSumPtWMass;
   else if(!strcmp(argv[3], "kGeom"         )) hypoClassKey = TtEvent::kGeom;
+  else if(!strcmp(argv[3], "kTrivial"      )) hypoClassKey = TtEvent::kTrivial;
   else if(!strcmp(argv[3], "kKinFit"       )) hypoClassKey = TtEvent::kKinFit;
   else if(!strcmp(argv[3], "kGenMatch"     )) hypoClassKey = TtEvent::kGenMatch;
   else if(!strcmp(argv[3], "kMVADisc"      )) hypoClassKey = TtEvent::kMVADisc; 
@@ -43,10 +44,11 @@ int main(int argc, char* argv[])
 	      << "        Please specify one out of the following keys:" << std::endl
 	      << "        * kWMassMaxSumPt" << std::endl
 	      << "        * kMaxSumPtWMass" << std::endl
-	      << "        * kGeom" << std::endl
-	      << "        * kKinFit" << std::endl
-	      << "        * kGenMatch" << std::endl
-	      << "        * kMVADisc" << std::endl;
+	      << "        * kGeom"          << std::endl
+	      << "        * kTrivial"       << std::endl
+	      << "        * kKinFit"        << std::endl
+	      << "        * kGenMatch"      << std::endl
+	      << "        * kMVADisc"       << std::endl;
     // -------------------------------------------------  
     return -1;
   }
