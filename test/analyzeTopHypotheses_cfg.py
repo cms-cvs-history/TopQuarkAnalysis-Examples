@@ -9,11 +9,21 @@ process.MessageLogger.categories.append('TtSemiLeptonicEvent')
 process.MessageLogger.cerr.TtSemiLeptonicEvent = cms.untracked.PSet(
     limit = cms.untracked.int32(-1)
 )
-process.MessageLogger.cerr.FwkReport.reportEvery = 10
+process.MessageLogger.cerr.FwkReport.reportEvery = 100
 
 ## define input
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_1.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_2.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_3.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_4.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_5.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_6.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_7.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_8.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_9.root',
+    'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_10.root',
     'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_11.root',
     'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_12.root',
     'rfio:/castor/cern.ch/user/h/henderle/ttbar/patTuple_13.root',
@@ -25,7 +35,7 @@ process.source = cms.Source("PoolSource",
 
 ## define maximal number of events to loop over
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(1000)
 )
 
 ## configure process options
@@ -44,16 +54,28 @@ process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttSemiLepEvtBuilder_cff")
 ## enable additional per-event printout from the TtSemiLeptonicEvent
 #process.ttSemiLepEvent.verbosity = 1
-## change maximum number of jets taken into account per event (default: 4)
-#process.ttSemiLepEvent.maxNJets = 5
 ## change jet-parton matching algorithm
 #process.ttSemiLepJetPartonMatch.algorithm = "unambiguousOnly"
+
+## use b-tagging two distinguish between light and b jets
+process.ttSemiLepHypGeom.useBTagging = False
+## choose algorithm for b-tagging
+process.ttSemiLepHypGeom.bTagAlgorithm = "trackCountingHighEffBJetTags"
+## minimum b discriminator value required for b jets
+process.ttSemiLepHypGeom.minBDiscBJets     = 1.90
+## maximum b discriminator value allowed for non-b jets
+process.ttSemiLepHypGeom.maxBDiscLightJets = 3.99
+## specify jet correction level
+process.ttSemiLepHypGeom.jetCorrectionLevel = "abs"
 
 ## choose which hypotheses to produce
 from TopQuarkAnalysis.TopEventProducers.sequences.ttSemiLepEvtBuilder_cff import addTtSemiLepHypotheses
 addTtSemiLepHypotheses(process,
-                       ["kMaxSumPtWMass", "kMVADisc"]
+                       ["kMaxSumPtWMass", "kGeom"]
                        )
+
+## change some attribute for all hypotheses
+#setForAllTtSemiLepHypotheses(process, "maxNJets", 5) # default: 4
 
 ## load HypothesisAnalyzer
 process.load("TopQuarkAnalysis.Examples.HypothesisAnalyzer_cff")
