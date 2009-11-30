@@ -39,10 +39,8 @@ class HypothesisAnalyzer : public edm::EDAnalyzer {
   TH1F* hadTopPullMass_;
 
   TH1F* genMatchDr_;
-  TH1F* mvaDisc_;
 
   TH2F* genMatchDrVsHadTopPullMass_;
-  TH2F* mvaDiscVsHadTopPullMass_;
 
 };
 

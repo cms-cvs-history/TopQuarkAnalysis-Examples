@@ -72,13 +72,13 @@ HypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setu
 
   if(hadW && genHadW) {
     hadWPullPt_  ->Fill( (hadW->pt() - genHadW->pt()) / genHadW->pt()   );
-    hadWPullEta_ ->Fill( (hadW->eta() - genHadW->eta()) / genHadW->eta()  );
+    hadWPullEta_ ->Fill( (hadW->eta() - genHadW->eta())  );
     hadWPullMass_->Fill( (hadW->mass() - genHadW->mass()) / genHadW->mass() );
   }
 
   if(hadTop && genHadTop) {
     hadTopPullPt_  ->Fill( (hadTop->pt() - genHadTop->pt()) / genHadTop->pt()   );
-    hadTopPullEta_ ->Fill( (hadTop->eta() - genHadTop->eta()) / genHadTop->eta()  );
+    hadTopPullEta_ ->Fill( (hadTop->eta() - genHadTop->eta())  );
     hadTopPullMass_->Fill( (hadTop->mass() - genHadTop->mass()) / genHadTop->mass() );
   }
 
@@ -87,12 +87,10 @@ HypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setu
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   genMatchDr_->Fill(semiLepEvt->genMatchSumDR());
-  mvaDisc_   ->Fill(semiLepEvt->mvaDisc());
 
   if(hadTop && genHadTop) {
 
     genMatchDrVsHadTopPullMass_->Fill((hadTop->mass() - genHadTop->mass()) / genHadTop->mass(), semiLepEvt->genMatchSumDR());
-    mvaDiscVsHadTopPullMass_   ->Fill((hadTop->mass() - genHadTop->mass()) / genHadTop->mass(), semiLepEvt->mvaDisc());
 
   }
 
@@ -117,22 +115,18 @@ HypothesisAnalyzer::beginJob(const edm::EventSetup&)
   hadTopMass_ = fs->make<TH1F>("hadTopMass", "M (t_{had}) [GeV]"    , 40, 0. , 400.);
 
   hadWPullPt_   = fs->make<TH1F>("hadWPullPt"  , "(p_{t,rec}-p_{t,gen})/p_{t,gen} (W_{had})"   , 40, -1., 1.);
-  hadWPullEta_  = fs->make<TH1F>("hadWPullEta" , "(#eta_{rec}-#eta_{gen})/#eta_{gen} (W_{had})", 40, -1., 1.);
+  hadWPullEta_  = fs->make<TH1F>("hadWPullEta" , "#eta_{rec}-#eta_{gen}", 40, -1., 1.);
   hadWPullMass_ = fs->make<TH1F>("hadWPullMass", "(M_{rec}-M_{gen})/M_{gen} (W_{had})"         , 40, -1., 1.);
 
   hadTopPullPt_   = fs->make<TH1F>("hadTopPullPt"  , "(p_{t,rec}-p_{t,gen})/p_{t,gen} (t_{had})"   , 40, -1., 1.);
-  hadTopPullEta_  = fs->make<TH1F>("hadTopPullEta" , "(#eta_{rec}-#eta_{gen})/#eta_{gen} (t_{had})", 40, -1., 1.);
+  hadTopPullEta_  = fs->make<TH1F>("hadTopPullEta" , "#eta_{rec}-#eta_{gen}", 40, -1., 1.);
   hadTopPullMass_ = fs->make<TH1F>("hadTopPullMass", "(M_{rec}-M_{gen})/M_{gen} (t_{had})"         , 40, -1., 1.);
 
   genMatchDr_ = fs->make<TH1F>("genMatchDr", "GenMatch #Sigma #Delta R", 40, 0., 4.);
-  mvaDisc_    = fs->make<TH1F>("mvaDisc"   , "MVA discriminator"       , 20, 0., 1.);
 
   genMatchDrVsHadTopPullMass_ = fs->make<TH2F>("genMatchDrVsHadTopPullMass",
 					       "GenMatch #Sigma #Delta R vs. (M_{rec}-M_{gen})/M_{gen} (t_{had}))",
 					       40, -1., 1., 40, 0., 4.);
-  mvaDiscVsHadTopPullMass_    = fs->make<TH2F>("mvaDiscVsHadTopPullMass",
-					       "MVA discriminator vs. (M_{rec}-M_{gen})/M_{gen} (t_{had}))",
-					       40, -1., 1., 20, 0., 1.);
 }
 
 void
