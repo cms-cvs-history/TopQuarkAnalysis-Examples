@@ -23,9 +23,9 @@ HypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setu
   edm::Handle<TtSemiLeptonicEvent> semiLepEvt;
   event.getByLabel(semiLepEvt_, semiLepEvt);
 
-  edm::Handle<int> hypoClassKeyHandle;
+  edm::Handle<std::string> hypoClassKeyHandle;
   event.getByLabel(hypoClassKey_, hypoClassKeyHandle);
-  TtSemiLeptonicEvent::HypoClassKey& hypoClassKey = (TtSemiLeptonicEvent::HypoClassKey&) *hypoClassKeyHandle;
+  std::string hypoClassKey = *hypoClassKeyHandle;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // check if hypothesis is available and valid in this event
@@ -63,8 +63,8 @@ HypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setu
   // get genParticles
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  const reco::Candidate* genHadTop = semiLepEvt->hadronicDecayTop();
-  const reco::Candidate* genHadW   = semiLepEvt->hadronicDecayW();
+  const reco::GenParticle* genHadTop = semiLepEvt->hadronicDecayTop();
+  const reco::GenParticle* genHadW   = semiLepEvt->hadronicDecayW();
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // fill pull histograms for pt, eta and the masses of the reconstructed with respect to the generated particles
