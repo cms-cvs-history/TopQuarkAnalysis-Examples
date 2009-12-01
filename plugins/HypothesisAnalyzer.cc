@@ -9,7 +9,7 @@
 
 HypothesisAnalyzer::HypothesisAnalyzer(const edm::ParameterSet& cfg):
   semiLepEvt_  (cfg.getParameter<edm::InputTag>("semiLepEvent")),
-  hypoClassKey_(cfg.getParameter<edm::InputTag>("hypoClassKey"))
+  hypoClassKey(cfg.getParameter<std::string>("hypoClassKey"))
 {
 }
 
@@ -22,10 +22,6 @@ HypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetup& setu
   
   edm::Handle<TtSemiLeptonicEvent> semiLepEvt;
   event.getByLabel(semiLepEvt_, semiLepEvt);
-
-  edm::Handle<std::string> hypoClassKeyHandle;
-  event.getByLabel(hypoClassKey_, hypoClassKeyHandle);
-  std::string hypoClassKey = *hypoClassKeyHandle;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // check if hypothesis is available and valid in this event

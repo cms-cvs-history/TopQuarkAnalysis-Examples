@@ -13,9 +13,9 @@ analyzeMaxSumPtWMass = analyzeHypothesis.clone()
 analyzeGeom          = analyzeHypothesis.clone()
 
 # configure analyzers
-analyzeGenMatch.hypoClassKey      = "ttSemiLepHypGenMatch:Key"
-analyzeMaxSumPtWMass.hypoClassKey = "ttSemiLepHypMaxSumPtWMass:Key"
-analyzeGeom.hypoClassKey          = "ttSemiLepHypGeom:Key"
+analyzeGenMatch.hypoClassKey      = "kGenMatch"
+analyzeMaxSumPtWMass.hypoClassKey = "kMaxSumPtWMass"
+analyzeGeom.hypoClassKey          = "kGeom"
 
 # define sequence
 analyzeHypotheses = cms.Sequence(analyzeGenMatch *

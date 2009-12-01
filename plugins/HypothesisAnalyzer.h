@@ -20,7 +20,7 @@ class HypothesisAnalyzer : public edm::EDAnalyzer {
   virtual void endJob();
 
   edm::InputTag semiLepEvt_;
-  edm::InputTag hypoClassKey_;
+  std::string hypoClassKey;
 
   TH1F* hadWPt_;
   TH1F* hadWEta_;
