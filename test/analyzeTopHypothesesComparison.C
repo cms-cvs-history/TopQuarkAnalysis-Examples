@@ -11,15 +11,15 @@
 
 void setHistoStyle(TH1* hist, unsigned int i, bool norm = false);
 
-void drawStack(THStack* stack, TH1F* hist, bool norm = false, double max);
+void drawStack(THStack* stack, TH1F* hist, bool norm = false, double max = 0.2);
 
-void analyzeTopHypotheses()
+void analyzeTopHypothesesComparison(TString ComparisonFile = "analyzeTopHypothesisBTagHadCor.root")
 {
 
   // open input file
   std::vector<TFile*> files_;
   files_.push_back(new TFile("analyzeTopHypothesis.root"));
-  files_.push_back(new TFile("analyzeTopHypothesisBTagHadCor.root"));
+  files_.push_back(new TFile(ComparisonFile));
 
   TString directories[3] = {"analyzeGenMatch",
 			    "analyzeMaxSumPtWMass",
@@ -188,13 +188,13 @@ void analyzeTopHypotheses()
   canvasHadWEta->Divide(2,2);
 
   canvasHadWEta->cd(1);
-  drawStack(stackHadWPullEta, hadWPullEta[0], true, 0.2);
+  drawStack(stackHadWPullEta, hadWPullEta[0], true, 0.22);
   legend->Draw();
   legend1->Draw();
   legend3->Draw();
 
   canvasHadWEta->cd(2);
-  drawStack(stackHadWPullEtaBTagHadCor, hadWPullEta[0], true, 0.2);
+  drawStack(stackHadWPullEtaBTagHadCor, hadWPullEta[0], true, 0.22);
   legend2->Draw();
   legend3->Draw();
 
@@ -232,13 +232,13 @@ void analyzeTopHypotheses()
   canvasHadTopEta->Divide(2,2);
 
   canvasHadTopEta->cd(1);
-  drawStack(stackHadTopPullEta, hadTopPullEta[0], true, 0.18);
+  drawStack(stackHadTopPullEta, hadTopPullEta[0], true, 0.2);
   legend->Draw();
   legend1->Draw();
   legend3->Draw();
   
   canvasHadTopEta->cd(2);
-  drawStack(stackHadTopPullEtaBTagHadCor, hadTopPullEta[3], true, 0.18);
+  drawStack(stackHadTopPullEtaBTagHadCor, hadTopPullEta[3], true, 0.2);
   legend2->Draw();
   legend3->Draw();
 
@@ -289,11 +289,11 @@ void analyzeTopHypotheses()
 
   // write postscript file
 
-  canvasHadWEta   ->Print("analyzeTopHypotheses.ps(");
-  canvasHadWMass  ->Print("analyzeTopHypotheses.ps");
-  canvasHadTopEta ->Print("analyzeTopHypotheses.ps");
-  canvasHadTopMass->Print("analyzeTopHypotheses.ps");
-  canvasQuali     ->Print("analyzeTopHypotheses.ps)");
+  canvasHadWEta   ->Print("analyzeTopHypothesesComparison.ps(");
+  canvasHadWMass  ->Print("analyzeTopHypothesesComparison.ps");
+  canvasHadTopEta ->Print("analyzeTopHypothesesComparison.ps");
+  canvasHadTopMass->Print("analyzeTopHypothesesComparison.ps");
+  canvasQuali     ->Print("analyzeTopHypothesesComparison.ps)");
 
 }
 
