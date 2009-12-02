@@ -2,8 +2,8 @@ import FWCore.ParameterSet.Config as cms
 
 #
 # make simple analysis plots for a comparison
-# between a simple algorithmic, a gen match and
-# an MVA discriminator based event hypothesis
+# between a gen match and two simple algorithmic
+# event hypotheses
 #
 
 # initialize analyzers
