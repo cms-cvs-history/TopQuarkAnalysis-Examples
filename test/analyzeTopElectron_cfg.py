@@ -34,10 +34,15 @@ process.GlobalTag.globaltag = cms.string('MC_3XY_V12::All')
 ## std sequence for pat
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
+## add electron user isolation
+from PhysicsTools.PatAlgos.tools.electronTools import addElectronUserIsolation
+addElectronUserIsolation(process)
+
+## electron analyzer
 from TopQuarkAnalysis.Examples.TopElecAnalyzer_cfi import analyzeElec
 process.analyzeElec = analyzeElec
 
-# register TFileService
+## register TFileService
 process.TFileService = cms.Service("TFileService",
     fileName = cms.string('analyzeTopElec.root')
 )
