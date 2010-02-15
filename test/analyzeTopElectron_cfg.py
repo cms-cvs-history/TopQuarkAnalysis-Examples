@@ -35,8 +35,8 @@ process.GlobalTag.globaltag = cms.string('MC_3XY_V12::All')
 process.load("PhysicsTools.PatAlgos.patSequences_cff")
 
 ## add electron user isolation
-from PhysicsTools.PatAlgos.tools.electronTools import addElectronUserIsolation
-addElectronUserIsolation(process)
+#from PhysicsTools.PatAlgos.tools.electronTools import addElectronUserIsolation
+#addElectronUserIsolation(process)
 
 ## electron analyzer
 from TopQuarkAnalysis.Examples.TopElecAnalyzer_cfi import analyzeElec
