@@ -6,11 +6,21 @@
 #include "TLegend.h"
 #include "TPostScript.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////
+//
+// modify name of input file and postscript output
+//
+///////////////////////////////////////////////////////////////////////////////////////////
+
+TString* infile  = new TString("analyzeFullLepHypotheses.root");
+TString* outfile = new TString("FullLepHypotheses.gv");
+
+
 void analyzeFullLepHypotheses(){
 
   gROOT->SetStyle("Plain");
 
-  TFile* file = new TFile("analyzeFullLepHypotheses.root");
+  TFile* file = new TFile(*infile);
 
   TH1F* topPtKinSol;   file->GetObject("analyzeKinSolution/topPt;1",   topPtKinSol );
   topPtKinSol->SetLineColor(2); topPtKinSol->SetLineWidth(2);
@@ -133,7 +143,7 @@ void analyzeFullLepHypotheses(){
   
 
   
-  TPostScript ps (TString("FullLepHypotheses.ps"), 111);
+  TPostScript ps (*outfile, 111);
   TCanvas* Canvas = new TCanvas("FullLepHypotheses", "FullLepHypotheses", 800, 1100);  
   Canvas->Clear(); 
   Canvas->Divide(2,3);  
