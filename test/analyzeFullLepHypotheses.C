@@ -13,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 TString* infile  = new TString("analyzeFullLepHypotheses.root");
-TString* outfile = new TString("FullLepHypotheses.gv");
+TString* outfile = new TString("FullLepHypotheses.ps");
 
 
 void analyzeFullLepHypotheses(){
