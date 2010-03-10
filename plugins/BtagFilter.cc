@@ -74,7 +74,7 @@ bool BtagFilter::filter(edm::Event& evt, const edm::EventSetup& setup)
   return true;
 }
 
-void BtagFilter::beginJob(const edm::EventSetup& setup)
+void BtagFilter::beginJob()
 {   
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // print out of cuts to be applied
