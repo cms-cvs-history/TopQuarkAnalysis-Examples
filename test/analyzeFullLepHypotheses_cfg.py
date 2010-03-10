@@ -5,7 +5,7 @@ process = cms.Process("TEST")
 ## configure message logger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = cms.untracked.string('INFO')
-process.MessageLogger.cerr.FwkReport.reportEvery = 10 
+process.MessageLogger.cerr.FwkReport.reportEvery = 1 
 process.MessageLogger.categories.append('TtFullLeptonicEvent')
 process.MessageLogger.categories.append('BtagFilter')
 process.MessageLogger.cerr.TtFullLeptonicEvent = cms.untracked.PSet(
@@ -15,9 +15,8 @@ process.MessageLogger.cerr.TtFullLeptonicEvent = cms.untracked.PSet(
 ## define input
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-    '/store/user/dammann/31X/ttbar/ttbar_madgraph_sig_1.root'
-     ),
-     skipEvents = cms.untracked.uint32(0)                            
+      'rfio:/castor/cern.ch/user/d/dammann/pattutorial/ttbar_dimuon_pat.root'
+    )                           
 )
 
 ## define maximal number of events to loop over
@@ -38,21 +37,6 @@ process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttGenEvent_cff")
 process.load("TopQuarkAnalysis.TopEventProducers.sequences.ttFullLepEvtBuilder_cff")
 ## enable additional per-event printout from the TtFullLeptonicEvent
 process.ttFullLepEvent.verbosity = 0
-
-
-## old method to modify configuration
-#process.kinSolutionTtFullLepEventHypothesis.muons = cms.InputTag("myMuons")
-#process.ttFullLepHypKinSolution.muons = cms.InputTag("myMuons")
-#process.ttFullLepHypGenMatch.muons = cms.InputTag("myMuons")
-
-#process.kinSolutionTtFullLepEventHypothesis.jets = cms.InputTag("myJets")
-#process.ttFullLepHypKinSolution.jets = cms.InputTag("myJets")
-#process.ttFullLepHypGenMatch.jets = cms.InputTag("myJets")
-
-#process.kinSolutionTtFullLepEventHypothesis.maxNJets = cms.int32(2)
-#process.ttFullLepHypKinSolution.maxNJets = cms.int32(2)
-#process.ttFullLepHypGenMatch.maxNJets = cms.int32(2)
-
 
 ## helper functions to change parameters of event reconstruction
 ## (can be used from tag v-6-05-02 upwards
