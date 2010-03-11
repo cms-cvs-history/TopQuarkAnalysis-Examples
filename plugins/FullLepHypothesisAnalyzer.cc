@@ -31,8 +31,13 @@ FullLepHypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetu
   // check if hypothesis is available and valid in this event
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
+  if( !fullLepEvt->isHypoAvailable(hypoClassKey) ){
+    edm::LogInfo("FullLepHypothesisAnalyzer") << "Hypothesis not available for this event";
+    return;
+  }
+
   if( !fullLepEvt->isHypoValid(hypoClassKey) ){
-    edm::LogInfo("HypothesisAnalyzer") << "Hypothesis not valid for this event";
+    edm::LogInfo("FullLepHypothesisAnalyzer") << "Hypothesis not valid for this event";
     return;
   }
 
