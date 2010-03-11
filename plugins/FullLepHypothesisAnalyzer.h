@@ -57,12 +57,8 @@ class FullLepHypothesisAnalyzer : public edm::EDAnalyzer {
   TH1F* topMassDiff_; 
   /// propability weight of kinematic solution 
   TH1F* solWeight_; 
-  /// weight vs mass pull
-  TH2F* solWeightVsTopPullMass_; 
-  /// dR from comparison between KinSol and GenMatch hypothesis    
-  TH1F* genMatchDr_; 
-  /// dR vs mass pull
-  TH2F* genMatchDrVsTopPullMass_;    
+  /// deltaR sum of GenMatch hypothesis    
+  TH1F* genMatchDr_;    
 };
 
 #endif

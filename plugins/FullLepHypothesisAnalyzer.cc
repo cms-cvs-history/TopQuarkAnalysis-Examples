@@ -122,12 +122,7 @@ FullLepHypothesisAnalyzer::analyze(const edm::Event& event, const edm::EventSetu
   topMassDiff_->Fill(top->mass() - topBar->mass());
 
   solWeight_->Fill(fullLepEvt->solWeight());
-  genMatchDr_->Fill(fullLepEvt->genMatchSumDR());  
-
-  if(top && genTop) {
-    solWeightVsTopPullMass_ ->Fill((top->mass() - genTop->mass()) / genTop->mass(), fullLepEvt->solWeight());
-    genMatchDrVsTopPullMass_->Fill((top->mass() - genTop->mass()) / genTop->mass(), fullLepEvt->genMatchSumDR());
-  }      
+  genMatchDr_->Fill(fullLepEvt->genMatchSumDR());       
 }
 
 void 
@@ -176,15 +171,8 @@ FullLepHypothesisAnalyzer::beginJob()
 
   solWeight_ = fs->make<TH1F>("solWeight", "Kin Solution Weight", 50, 0., 1.);
 
-  solWeightVsTopPullMass_ = fs->make<TH2F>("solWeightVsTopPullMass",
-					    "Solution Weight vs. (M_{rec}-M_{gen})/M_{gen} (t))",
-					    40, -1., 1., 50, 0., 1.); 
-
   genMatchDr_ = fs->make<TH1F>("genMatchDr", "GenMatch #Sigma #Delta R", 40, 0., 4.);
-
-  genMatchDrVsTopPullMass_ = fs->make<TH2F>("genMatchDrVsTopPullMass",
-					    "GenMatch #Sigma #Delta R vs. (M_{rec}-M_{gen})/M_{gen} (t))",
-					    40, -1., 1., 40, 0., 4.); 					   					        
+				   					        
 }
 
 void

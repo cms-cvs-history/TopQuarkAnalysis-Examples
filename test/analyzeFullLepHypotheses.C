@@ -133,14 +133,10 @@ void analyzeFullLepHypotheses(){
   TH1F* topMassDiffKinSol;     file->GetObject("analyzeKinSolution/topMassDiff;1", topMassDiffKinSol ); 
   topMassDiffKinSol->SetTitle("m (top) - m (anti top) for KinSolution"); 
   TH1F* topMassDiffGenMatch;   file->GetObject("analyzeGenMatch/topMassDiff;1",    topMassDiffGenMatch );
-  topMassDiffGenMatch->SetTitle("m (top) - m (anti top) for GenMatch");
-  
-  TH1F* solWeight;              file->GetObject("analyzeKinSolution/solWeight;1",              solWeight );  
-  TH2F* solWeightVsTopPullMass; file->GetObject("analyzeKinSolution/solWeightVsTopPullMass;1", solWeightVsTopPullMass );  
-      
-  TH1F* genMatchDr;              file->GetObject("analyzeKinSolution/genMatchDr;1",              genMatchDr );  
-  TH2F* genMatchDrVsTopPullMass; file->GetObject("analyzeKinSolution/genMatchDrVsTopPullMass;1", genMatchDrVsTopPullMass );    
-  
+  topMassDiffGenMatch->SetTitle("m (top) - m (anti top) for GenMatch");  
+  TH1F* solWeight;  file->GetObject("analyzeKinSolution/solWeight;1",  solWeight );        
+  TH1F* genMatchDr; file->GetObject("analyzeKinSolution/genMatchDr;1", genMatchDr );  
+   
 
   
   TPostScript ps (*outfile, 111);
@@ -265,13 +261,9 @@ void analyzeFullLepHypotheses(){
   Canvas->cd(2);
   topMassDiffGenMatch->Draw(); 
   Canvas->cd(3);
-  solWeight->Draw();    
+  solWeight->Draw();       
   Canvas->cd(4);
-  solWeightVsTopPullMass->Draw("BOX");   
-  Canvas->cd(5);
-  genMatchDr->Draw();   
-  Canvas->cd(6);
-  genMatchDrVsTopPullMass->Draw("BOX");   
+  genMatchDr->Draw();     
   Canvas->Update();
        
   Canvas->Close();  
